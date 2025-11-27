@@ -11,6 +11,7 @@
     <?php wp_head(); ?>
     <style>
         .hero-clip { clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%); }
+        /* Ensure mobile menu links are always dark */
         .mobile-menu-link a { color: #1e293b !important; }
     </style>
 </head>
@@ -18,7 +19,7 @@
 
 <header x-data="{ mobileMenuOpen: false, scrolled: false }" 
         @scroll.window="scrolled = (window.pageYOffset > 50) ? true : false"
-        class="fixed w-full top-0 z-50 transition-colors duration-500 ease-in-out border-b py-4"
+        class="fixed w-full top-0 z-50 transition-colors duration-500 ease-in-out py-4"
         :class="scrolled ? 'bg-white/90 backdrop-blur-xl shadow-sm border-slate-200/50' : 'bg-white/10 backdrop-blur-md border-white/10'">
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,20 +37,18 @@
             </div>
 
             <div class="hidden md:flex items-center">
-                
                 <div class="transition-colors duration-300 font-heading text-sm font-semibold tracking-wide mr-8"
                      :class="scrolled ? 'text-slate-600' : 'text-white drop-shadow-sm'">
                     <?php
                         wp_nav_menu(array(
                             'theme_location' => 'primary',
-                            'container'      => false, // Removes the <div> wrapper around ul
-                            'menu_class'     => 'flex gap-8 list-none m-0 p-0 items-center', // The CSS Magic
+                            'container'      => false,
+                            'menu_class'     => 'flex gap-8 list-none m-0 p-0 items-center',
                             'echo'           => true,
                             'depth'          => 1,
                         ));
                     ?>
                 </div>
-                
                 <a href="<?php echo site_url('/contact'); ?>" 
                    :class="scrolled ? 'bg-brand text-white hover:bg-brand-dark border border-transparent' : 'bg-white/20 backdrop-blur-lg border border-white/30 text-white hover:bg-white/30'"
                    class="px-6 py-2 rounded-full font-bold text-sm transition shadow-lg hover:shadow-xl font-heading">
@@ -73,16 +72,26 @@
     </div>
 
     <div x-show="mobileMenuOpen" 
-         class="md:hidden bg-white border-t border-slate-100 absolute w-full shadow-xl text-slate-800" style="display: none;">
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         class="md:hidden bg-white border-b border-slate-100 absolute top-full left-0 w-full shadow-xl text-slate-800" style="display: none;">
+        
         <div class="px-4 pt-4 pb-8 space-y-1 mobile-menu-link">
             <?php
                 wp_nav_menu(array(
                     'theme_location' => 'primary',
                     'container'      => false,
-                    'menu_class'     => 'flex flex-col space-y-4 font-heading font-semibold text-lg list-none m-0 p-0', // Added list-none here too
+                    'menu_class'     => 'flex flex-col space-y-4 font-heading font-semibold text-lg list-none m-0 p-0',
                     'echo'           => true,
                 ));
             ?>
+             <div class="pt-6 mt-4 border-t border-slate-100">
+                <a href="<?php echo site_url('/contact'); ?>" class="block w-full text-center px-6 py-3 bg-brand text-white font-bold rounded-xl shadow-md">
+                    Hubungi Kami
+                </a>
+            </div>
         </div>
     </div>
 </header>

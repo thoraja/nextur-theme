@@ -6,7 +6,6 @@
             <img class="w-full h-full object-cover opacity-40" src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=2021&q=80" alt="Travel Background">
             <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/20 to-slate-900"></div>
         </div>
-        
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <span class="inline-block py-1 px-3 rounded-full bg-brand/20 border border-brand/30 text-sky-300 text-sm font-semibold mb-6 backdrop-blur-sm font-heading">
                 #1 Travel Agency di Indonesia
@@ -93,50 +92,66 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
-                    <div class="relative h-64 overflow-hidden">
-                        <img class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=600" alt="Bali">
-                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand font-heading">4H 3M</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-slate-900 font-heading">Nusa Penida, Bali</h3>
-                        <p class="text-slate-500 text-sm mb-4 mt-2">Jelajahi pantai Kelingking dan keindahan bawah laut.</p>
-                        <div class="flex justify-between items-center border-t pt-4">
-                            <span class="text-slate-400 text-xs">Mulai dari</span>
-                            <span class="text-brand font-bold text-lg font-heading">Rp 2.500.000</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
-                    <div class="relative h-64 overflow-hidden">
-                        <img class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" src="https://images.unsplash.com/photo-1516690561799-46d8f74f9dab?auto=format&fit=crop&q=80&w=600" alt="Raja Ampat">
-                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand font-heading">5H 4M</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-slate-900 font-heading">Raja Ampat, Papua</h3>
-                        <p class="text-slate-500 text-sm mb-4 mt-2">Surga tersembunyi dengan gugusan pulau karang.</p>
-                        <div class="flex justify-between items-center border-t pt-4">
-                            <span class="text-slate-400 text-xs">Mulai dari</span>
-                            <span class="text-brand font-bold text-lg font-heading">Rp 6.500.000</span>
-                        </div>
-                    </div>
-                </div>
+                <?php
+                // THE DYNAMIC LOOP
+                $args = array(
+                    'post_type' => 'trip',
+                    'posts_per_page' => 6, // Limit to 6 items
+                );
+                $trips = new WP_Query($args);
 
-                <div class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2">
+                if ($trips->have_posts()) :
+                    while ($trips->have_posts()) : $trips->the_post();
+                        // Get Meta Data
+                        $price = get_post_meta(get_the_ID(), '_trip_price', true);
+                        $duration = get_post_meta(get_the_ID(), '_trip_duration', true);
+                        $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : 'https://via.placeholder.com/600x400?text=No+Image';
+                        $formatted_price = $price ? 'Rp ' . number_format($price, 0, ',', '.') : 'Ask for Price';
+                ?>
+                
+                <a href="<?php the_permalink(); ?>" class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-2 block">
                     <div class="relative h-64 overflow-hidden">
-                        <img class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=600" alt="Paris">
-                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand font-heading">7 Hari</div>
+                        <img class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" 
+                             src="<?php echo esc_url($img_url); ?>" 
+                             alt="<?php the_title(); ?>">
+                        
+                        <?php if($duration): ?>
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-brand font-heading">
+                            <?php echo esc_html($duration); ?>
+                        </div>
+                        <?php endif; ?>
                     </div>
+                    
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-slate-900 font-heading">Eropa Barat Trip</h3>
-                        <p class="text-slate-500 text-sm mb-4 mt-2">Keliling Paris, Swiss, dan Amsterdam musim dingin.</p>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-slate-900 font-heading group-hover:text-brand transition">
+                                <?php the_title(); ?>
+                            </h3>
+                            <div class="flex items-center text-amber-400">
+                                <span>★</span><span class="text-slate-600 text-sm ml-1">5.0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-slate-500 text-sm mb-4 mt-2 line-clamp-2">
+                             <?php echo get_the_excerpt() ? get_the_excerpt() : wp_trim_words(get_the_content(), 10); ?>
+                        </div>
+                        
                         <div class="flex justify-between items-center border-t pt-4">
                             <span class="text-slate-400 text-xs">Mulai dari</span>
-                            <span class="text-brand font-bold text-lg font-heading">Rp 18.500.000</span>
+                            <span class="text-brand font-bold text-lg font-heading"><?php echo $formatted_price; ?></span>
                         </div>
                     </div>
-                </div>
+                </a>
+
+                <?php 
+                    endwhile; 
+                    wp_reset_postdata(); 
+                else : 
+                ?>
+                    <div class="col-span-3 text-center py-10 text-slate-500">
+                        <p>Belum ada trip yang tersedia saat ini.</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>

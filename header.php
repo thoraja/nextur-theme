@@ -4,6 +4,8 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <link rel="icon" href="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" type="image/png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
@@ -11,7 +13,6 @@
     <?php wp_head(); ?>
     <style>
         .hero-clip { clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%); }
-        /* Only targets the menu links now */
         .mobile-menu-link a { color: #1e293b !important; }
     </style>
 </head>
@@ -83,7 +84,6 @@
                 wp_nav_menu(array(
                     'theme_location' => 'primary',
                     'container'      => false,
-                    // Applied class ONLY to the menu list
                     'menu_class'     => 'flex flex-col space-y-4 font-heading font-semibold text-lg list-none m-0 p-0 mobile-menu-link',
                     'echo'           => true,
                 ));

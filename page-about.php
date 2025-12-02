@@ -11,90 +11,58 @@ get_header();
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
         </div>
         <div class="relative z-10 text-center px-4">
-            <span class="text-brand font-bold tracking-widest uppercase text-sm mb-2 block font-heading">Our Story</span>
             <h1 class="text-4xl md:text-6xl font-bold text-white font-heading">Tentang Nextur</h1>
         </div>
     </section>
 
     <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div class="grid lg:grid-cols-2 gap-16 items-start">
+                
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-900 mb-6 font-heading">Nextur <br><span class="text-brand">Awaits You</span></h2>
-                    <div class="prose text-slate-600 font-sans space-y-4">
-                        <p>
-                            Nextur menggabungkan visi perjalanan masa depan dengan pengalaman yang dikurasi secara premium. Tagline “Awaits You” menegaskan bahwa setiap destinasi, petualangan, dan pengalaman eksklusif telah disiapkan dan sedang menunggu Anda. Nextur adalah undangan personal menuju eksplorasi baru—lebih terarah, lebih bermakna, dan berkelas.
+                    <h2 class="text-3xl font-bold text-slate-900 mb-8 font-heading">Visi & Filosofi</h2>
+                    <div class="prose text-lg text-slate-600 font-sans leading-relaxed space-y-6">
+                        <p class="font-medium text-slate-800">
+                            "Bagi kami, masa depan bukan sekadar tujuan, tetapi jembatan antara keindahan destinasi dan kebutuhan pelanggan."
                         </p>
                         <p>
-                            Nextur berasal dari kata next (berikutnya/masa depan) dan tour (perjalanan). Nama ini mencerminkan sebuah brand perjalanan yang selalu bergerak maju, menghadirkan pengalaman baru, dan menjadi pintu menuju destinasi serta petualangan selanjutnya.
+                            Suatu perjalanan bukan lagi sekadar perpindahan, tetapi transformasi yang memperkaya perspektif. Kami berkomitmen untuk menghadirkan pengalaman yang tidak hanya membawa Anda ke tempat baru, tetapi juga memberikan nilai baru dalam hidup Anda.
                         </p>
                     </div>
                 </div>
-                <div class="relative">
-                    <div class="absolute -top-4 -right-4 w-24 h-24 bg-brand/10 rounded-full blur-xl"></div>
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800" 
-                         alt="Our Team" class="relative rounded-2xl shadow-xl z-10">
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-slate-900 font-heading">Kenapa Memilih Kami?</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition text-center">
-                    <div class="w-16 h-16 bg-blue-50 text-brand rounded-xl flex items-center justify-center text-3xl mb-6 mx-auto">✈️</div>
-                    <h3 class="text-xl font-bold mb-3 font-heading">Itinerary Terencana</h3>
-                    <p class="text-slate-600 text-sm">Jadwal padat dan efisien agar Anda tidak membuang waktu.</p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition text-center">
-                    <div class="w-16 h-16 bg-blue-50 text-brand rounded-xl flex items-center justify-center text-3xl mb-6 mx-auto">🛡️</div>
-                    <h3 class="text-xl font-bold mb-3 font-heading">Aman & Terpercaya</h3>
-                    <p class="text-slate-600 text-sm">Legalitas resmi PT dan asuransi perjalanan included.</p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition text-center">
-                    <div class="w-16 h-16 bg-blue-50 text-brand rounded-xl flex items-center justify-center text-3xl mb-6 mx-auto">💰</div>
-                    <h3 class="text-xl font-bold mb-3 font-heading">Harga Transparan</h3>
-                    <p class="text-slate-600 text-sm">Tidak ada biaya tersembunyi. Apa yang Anda lihat adalah yang Anda bayar.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+                <div class="space-y-6">
+                    <div class="flex gap-4 p-6 bg-slate-50 rounded-xl border-l-4 border-brand hover:shadow-md transition">
+                        <div class="flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 font-heading">Innovation with Purpose</h3>
+                            <p class="text-slate-600 text-sm mt-1">Solusi desain untuk nilai nyata dan kebutuhan pasar.</p>
+                        </div>
+                    </div>
 
-    <section class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-slate-900 font-heading">Tim Kami</h2>
-                <p class="mt-4 text-slate-600">Orang-orang di balik perjalanan seru Anda.</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="group text-center">
-                    <div class="overflow-hidden rounded-2xl mb-6 shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" alt="CEO">
+                    <div class="flex gap-4 p-6 bg-slate-50 rounded-xl border-l-4 border-teal-500 hover:shadow-md transition">
+                        <div class="flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 font-heading">Partnership for Growth</h3>
+                            <p class="text-slate-600 text-sm mt-1">Kolaborasi sebagai perjalanan bersama. Pertumbuhan klien adalah keberhasilan kami.</p>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold font-heading">Budi Santoso</h3>
-                    <p class="text-brand font-medium text-sm">Founder & CEO</p>
-                </div>
-                <div class="group text-center">
-                    <div class="overflow-hidden rounded-2xl mb-6 shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" alt="Ops">
+
+                    <div class="flex gap-4 p-6 bg-slate-50 rounded-xl border-l-4 border-green-500 hover:shadow-md transition">
+                        <div class="flex-shrink-0 mt-1">
+                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 font-heading">Sustainable Impact</h3>
+                            <p class="text-slate-600 text-sm mt-1">Memprioritaskan keberlanjutan untuk manfaat masa depan.</p>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold font-heading">Sarah Wijaya</h3>
-                    <p class="text-brand font-medium text-sm">Head of Operations</p>
                 </div>
-                <div class="group text-center">
-                    <div class="overflow-hidden rounded-2xl mb-6 shadow-lg">
-                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" alt="Guide">
-                    </div>
-                    <h3 class="text-xl font-bold font-heading">Doni Pratama</h3>
-                    <p class="text-brand font-medium text-sm">Senior Tour Guide</p>
-                </div>
+
             </div>
         </div>
     </section>

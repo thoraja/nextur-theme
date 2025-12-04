@@ -45,24 +45,38 @@ add_action('init', 'nextur_menus');
 
 
 /* -------------------------------------------------------------------------- */
-/* PHASE 2: NEXTUR TRIP DATA ARCHITECT (Native Meta Boxes)                    */
+/* PHASE 2: NEXTUR TRIP DATA ARCHITECT (Updated Taxonomies)                   */
 /* -------------------------------------------------------------------------- */
 
-// 1. CPT & Taxonomy
 function nextur_init_structure() {
+    // 1. Post Type: Trip
     register_post_type('trip', array(
         'labels' => array('name' => 'Trips', 'singular_name' => 'Trip'),
         'public' => true,
         'has_archive' => true,
         'menu_icon' => 'dashicons-airplane',
-        'supports' => array('title', 'thumbnail'), 
+        'supports' => array('title', 'thumbnail'),
         'rewrite' => array('slug' => 'trip'),
     ));
     
+    // 2. Taxonomy: Destinations (Updated Slug to Plural)
     register_taxonomy('destination', 'trip', array(
         'labels' => array('name' => 'Destinations', 'singular_name' => 'Destination'),
-        'hierarchical' => true,
+        'hierarchical' => true, // Category-style (Parent/Child)
         'public' => true,
+        'show_admin_column' => true,
+        'rewrite' => array('slug' => 'destinations'), // Changed from 'destination'
+        'show_in_rest' => true,
+    ));
+
+    // 3. NEW Taxonomy: Activities (Tags style)
+    register_taxonomy('activity', 'trip', array(
+        'labels' => array('name' => 'Activities', 'singular_name' => 'Activity'),
+        'hierarchical' => false, // Tag-style (No parents)
+        'public' => true,
+        'show_admin_column' => true,
+        'rewrite' => array('slug' => 'tour-activity'), // Matches LuxExplorer style
+        'show_in_rest' => true,
     ));
 }
 add_action('init', 'nextur_init_structure');
@@ -282,3 +296,104 @@ function nextur_handle_booking() {
 }
 add_action('admin_post_submit_booking', 'nextur_handle_booking');
 add_action('admin_post_nopriv_submit_booking', 'nextur_handle_booking');
+
+/* -------------------------------------------------------------------------- */
+/* PHASE 2 ADD-ON: INDONESIA HIGHLIGHTS (Dynamic Gallery)                     */
+/* -------------------------------------------------------------------------- */
+
+// 1. Register CPT
+function nextur_register_gallery_cpt() {
+    register_post_type('gallery_item', array(
+        'labels' => array(
+            'name' => 'Indo Highlights',
+            'singular_name' => 'Highlight',
+            'add_new_item' => 'Add New Destination',
+            'edit_item' => 'Edit Destination'
+        ),
+        'public' => true,
+        'exclude_from_search' => true, // Don't show in search results
+        'publicly_queryable'  => false, // No single page needed
+        'show_ui' => true,
+        'menu_icon' => 'dashicons-images-alt2',
+        'supports' => array('title', 'thumbnail'), // Title = City Name, Thumbnail = Image
+    ));
+}
+add_action('init', 'nextur_register_gallery_cpt');
+
+// 2. Add Link Meta Box
+function nextur_add_gallery_meta() {
+    add_meta_box('gallery_link_box', 'Destination Link', 'nextur_render_gallery_meta', 'gallery_item', 'normal', 'high');
+}
+function nextur_render_gallery_meta($post) {
+    $link = get_post_meta($post->ID, '_gallery_link', true);
+    ?>
+    <p>
+        <label style="font-weight:bold; display:block; margin-bottom:5px;">Target URL</label>
+        <input type="text" name="_gallery_link" value="<?php echo esc_attr($link); ?>" class="widefat" placeholder="e.g. https://nextur.com/trips/bali or #">
+        <span class="description">Enter the URL this card should link to.</span>
+    </p>
+    <?php
+}
+function nextur_save_gallery_meta($post_id) {
+    if (isset($_POST['_gallery_link'])) {
+        update_post_meta($post_id, '_gallery_link', sanitize_text_field($_POST['_gallery_link']));
+    }
+}
+add_action('add_meta_boxes', 'nextur_add_gallery_meta');
+add_action('save_post', 'nextur_save_gallery_meta');
+
+// 3. Admin Columns (Show Image in List)
+function nextur_gallery_columns($columns) {
+    $new_columns = array(
+        'cb' => $columns['cb'],
+        'thumbnail' => 'Image', // Add Image Column
+        'title' => 'City Name',
+        'link' => 'Target Link',
+        'date' => $columns['date'],
+    );
+    return $new_columns;
+}
+function nextur_gallery_custom_column($column, $post_id) {
+    if ($column === 'thumbnail') {
+        echo get_the_post_thumbnail($post_id, array(80, 80), array('style' => 'border-radius:4px; object-fit:cover;'));
+    }
+    if ($column === 'link') {
+        echo get_post_meta($post_id, '_gallery_link', true);
+    }
+}
+add_filter('manage_gallery_item_posts_columns', 'nextur_gallery_columns');
+add_action('manage_gallery_item_posts_custom_column', 'nextur_gallery_custom_column', 10, 2);
+
+/* -------------------------------------------------------------------------- */
+/* HELPER: SMART TERM IMAGE (The "Fallback" Logic)                            */
+/* -------------------------------------------------------------------------- */
+// Automatically finds a background image for Archive pages
+function nextur_get_term_image_url($term_id = null) {
+    // 1. If we implement a custom field later, check it here first.
+    // $manual_img = get_term_meta($term_id, '_term_image_url', true);
+    // if($manual_img) return $manual_img;
+
+    // 2. Fallback: Get the featured image of the latest post in this term
+    $args = array(
+        'post_type' => 'trip',
+        'posts_per_page' => 1,
+        'tax_query' => array(
+            array(
+                'taxonomy' => get_queried_object()->taxonomy,
+                'field'    => 'term_id',
+                'terms'    => $term_id,
+            ),
+        ),
+    );
+    $latest_trip = new WP_Query($args);
+    
+    if ($latest_trip->have_posts()) {
+        $latest_trip->the_post();
+        $img_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+        wp_reset_postdata();
+        if ($img_url) return $img_url;
+    }
+
+    // 3. Fallback: Default placeholder
+    return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80'; 
+}

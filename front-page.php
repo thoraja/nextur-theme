@@ -212,7 +212,7 @@
         </div>
     </section>
 
-    <section class="py-10 bg-slate-50 border-t border-slate-200" 
+    <!-- <section class="py-10 bg-slate-50 border-t border-slate-200" 
              x-data="{ 
                 atStart: true, atEnd: false,
                 updateScroll() { const el = $refs.activitySlider; this.atStart = el.scrollLeft <= 5; this.atEnd = Math.ceil(el.scrollLeft + el.clientWidth) >= el.scrollWidth - 10; }
@@ -250,45 +250,95 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <section class="py-10 bg-white border-t border-slate-200" 
              x-data="{ 
-                atStart: true, atEnd: false,
-                updateScroll() { const el = $refs.destSlider; this.atStart = el.scrollLeft <= 5; this.atEnd = Math.ceil(el.scrollLeft + el.clientWidth) >= el.scrollWidth - 10; }
-             }" x-init="$nextTick(() => updateScroll())" @resize.window.debounce.100ms="updateScroll()">
+                atStart: true, 
+                atEnd: false,
+                updateScroll() { 
+                    const el = $refs.destSlider; 
+                    this.atStart = el.scrollLeft <= 5; 
+                    this.atEnd = Math.ceil(el.scrollLeft + el.clientWidth) >= el.scrollWidth - 10; 
+                }
+             }" 
+             x-init="$nextTick(() => updateScroll())" 
+             @resize.window.debounce.100ms="updateScroll()">
+             
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-end mb-6">
                 <div>
                     <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading">Destinasi Populer</h2>
                     <p class="mt-1 text-slate-600 text-sm">Eksplorasi berdasarkan negara atau wilayah.</p>
                 </div>
+                
                 <div class="hidden md:flex gap-2">
-                    <button @click="$refs.destSlider.scrollBy({ left: -240, behavior: 'smooth' })" :disabled="atStart" :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">←</button>
-                    <button @click="$refs.destSlider.scrollBy({ left: 240, behavior: 'smooth' })" :disabled="atEnd" :class="atEnd ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">→</button>
+                    <button @click="$refs.destSlider.scrollBy({ left: -240, behavior: 'smooth' })" 
+                            :disabled="atStart" 
+                            :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'"
+                            class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">
+                        ←
+                    </button>
+                    <button @click="$refs.destSlider.scrollBy({ left: 240, behavior: 'smooth' })" 
+                            :disabled="atEnd" 
+                            :class="atEnd ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'"
+                            class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">
+                        →
+                    </button>
                 </div>
             </div>
+
             <div class="relative -mx-4 md:mx-0">
-                <div x-ref="destSlider" @scroll.debounce.10ms="updateScroll()" class="flex gap-4 md:gap-6 overflow-x-auto pb-4 pt-1 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
+                <div x-ref="destSlider" 
+                     @scroll.debounce.10ms="updateScroll()" 
+                     class="flex gap-4 md:gap-6 overflow-x-auto md:overflow-hidden pb-4 pt-1 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
+                    
                     <?php
-                    $destinations = get_terms(array('taxonomy' => 'destination', 'hide_empty' => true, 'number' => 10));
-                    if (!empty($destinations) && !is_wp_error($destinations)) : foreach ($destinations as $term) :
-                        $img_url = nextur_get_term_image_url($term->term_id);
-                        $link = get_term_link($term);
+                    // 1. Get Destination Terms
+                    $destinations = get_terms(array(
+                        'taxonomy'   => 'destination',
+                        'hide_empty' => true, // Only show destinations that have trips
+                        'number'     => 10
+                    ));
+
+                    if (!empty($destinations) && !is_wp_error($destinations)) :
+                        foreach ($destinations as $term) :
+                            
+                            // FIX: Explicitly pass 'destination' so it works on Homepage
+                            $img_url = nextur_get_term_image_url($term->term_id, 'destination');
+                            
+                            $link = get_term_link($term);
                     ?>
-                        <a href="<?php echo esc_url($link); ?>" class="relative flex-shrink-0 w-44 md:w-52 aspect-[3/4] snap-center md:snap-start rounded-xl overflow-hidden group bg-slate-200 shadow hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                            <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($term->name); ?>" class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+                        <a href="<?php echo esc_url($link); ?>" 
+                           class="relative flex-shrink-0 w-44 md:w-52 aspect-[3/4] snap-center md:snap-start rounded-xl overflow-hidden group bg-slate-200 shadow hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                            
+                            <img src="<?php echo esc_url($img_url); ?>" 
+                                 alt="<?php echo esc_attr($term->name); ?>" 
+                                 class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+                            
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
+                            
                             <div class="absolute bottom-0 left-0 p-4 w-full">
-                                <h3 class="text-lg font-bold text-white font-heading tracking-wide leading-tight"><?php echo esc_html($term->name); ?></h3>
+                                <h3 class="text-lg font-bold text-white font-heading tracking-wide leading-tight">
+                                    <?php echo esc_html($term->name); ?>
+                                </h3>
                                 <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-[10px] font-medium text-white/80 bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full"><?php echo $term->count; ?> Paket</span>
+                                    <span class="text-[10px] font-medium text-white/80 bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full">
+                                        <?php echo $term->count; ?> Paket
+                                    </span>
                                     <div class="h-0.5 w-0 bg-brand transition-all duration-300 group-hover:w-6"></div>
                                 </div>
                             </div>
                         </a>
-                    <?php endforeach; else : ?>
-                        <div class="w-full text-center py-8 bg-white border border-dashed border-slate-300 rounded-xl"><p class="text-slate-400 text-xs">Belum ada kategori destinasi.</p></div>
+
+                    <?php 
+                        endforeach; 
+                    else :
+                    ?>
+                        <div class="w-full text-center py-8 bg-white border border-dashed border-slate-300 rounded-xl">
+                            <p class="text-slate-400 text-xs">Belum ada kategori destinasi.</p>
+                            <p class="text-[10px] text-slate-300 mt-1">Upload Trip baru untuk memunculkan destinasi.</p>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>

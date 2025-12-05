@@ -13,7 +13,14 @@
     <?php wp_head(); ?>
     <style>
         .hero-clip { clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%); }
+        /* Only targets the menu links */
         .mobile-menu-link a { color: #1e293b !important; }
+        
+        /* FIX: Force Flatpickr wrapper to be full width */
+        .flatpickr-wrapper {
+            width: 100% !important;
+            display: block !important;
+        }
     </style>
 </head>
 <body <?php body_class('font-sans text-slate-800 antialiased'); ?>>

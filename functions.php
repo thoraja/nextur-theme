@@ -3,12 +3,18 @@
 /* PHASE 1: THEME SETUP (Tailwind, Menus, Etc)                                */
 /* -------------------------------------------------------------------------- */
 function nextur_scripts() {
-    // Tailwind CSS (CDN)
-    wp_enqueue_script('tailwind', 'https://cdn.tailwindcss.com?plugins=typography', array(), '3.4', false); // Added typography plugin
-    // Alpine.js (CDN)
-    wp_enqueue_script('alpine', '//unpkg.com/alpinejs', array(), '3.0', true);
+    // 1. Tailwind CSS
+    wp_enqueue_script('tailwind', 'https://cdn.tailwindcss.com?plugins=typography', array(), '3.4', false);
+    
+    // 2. Register & Load Flatpickr (Datepicker) FIRST
+    wp_enqueue_style('flatpickr-css', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css');
+    wp_enqueue_script('flatpickr', 'https://cdn.jsdelivr.net/npm/flatpickr', array(), '4.6', true);
 
-    // Config
+    // 3. Load Alpine.js (DEPENDS on flatpickr)
+    // This forces Alpine to wait until Flatpickr is ready
+    wp_enqueue_script('alpine', '//unpkg.com/alpinejs', array('flatpickr'), '3.0', true);
+
+    // 4. Tailwind Config
     wp_add_inline_script('tailwind', "
         tailwind.config = {
             theme: {
@@ -379,32 +385,40 @@ add_action('manage_gallery_item_posts_custom_column', 'nextur_gallery_custom_col
 /* HELPER: SMART TERM IMAGE (The "Fallback" Logic)                            */
 /* -------------------------------------------------------------------------- */
 // Automatically finds a background image for Archive pages
-function nextur_get_term_image_url($term_id = null) {
-    // 1. If we implement a custom field later, check it here first.
-    // $manual_img = get_term_meta($term_id, '_term_image_url', true);
-    // if($manual_img) return $manual_img;
+/* -------------------------------------------------------------------------- */
+/* HELPER: SMART TERM IMAGE (Fixed for Homepage)                              */
+/* -------------------------------------------------------------------------- */
+function nextur_get_term_image_url($term_id = null, $taxonomy = 'destination') {
+    // 1. If we are on an archive page and no ID is provided, auto-detect
+    if (!$term_id && is_tax()) {
+        $obj = get_queried_object();
+        $term_id = $obj->term_id;
+        $taxonomy = $obj->taxonomy;
+    }
 
-    // 2. Fallback: Get the featured image of the latest post in this term
+    // 2. Query the latest trip in this specific Term & Taxonomy
     $args = array(
-        'post_type' => 'trip',
+        'post_type'      => 'trip',
         'posts_per_page' => 1,
-        'tax_query' => array(
+        'tax_query'      => array(
             array(
-                'taxonomy' => get_queried_object()->taxonomy,
+                'taxonomy' => $taxonomy, // Now uses the passed argument (e.g., 'destination' or 'activity')
                 'field'    => 'term_id',
                 'terms'    => $term_id,
             ),
         ),
     );
+    
     $latest_trip = new WP_Query($args);
     
     if ($latest_trip->have_posts()) {
         $latest_trip->the_post();
-        $img_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+        $img_url = get_the_post_thumbnail_url(get_the_ID(), 'large'); // Changed to 'large' for better performance
         wp_reset_postdata();
+        
         if ($img_url) return $img_url;
     }
 
-    // 3. Fallback: Default placeholder
+    // 3. Fallback
     return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80'; 
 }

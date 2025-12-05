@@ -104,6 +104,17 @@ function render_trip_header_box($post) {
     <p><label><strong>Route</strong></label><input type="text" name="_trip_route" value="<?php echo esc_attr($route); ?>" class="widefat"></p>
     <p><label><strong>Start Price (IDR)</strong></label><input type="number" name="_trip_price" value="<?php echo esc_attr($price); ?>" class="widefat"></p>
     <?php
+    $featured = get_post_meta($post->ID, '_trip_is_featured', true);
+    ?>
+    <p>
+        <label><strong>Featured on Homepage?</strong></label>
+        <br>
+        <label>
+            <input type="checkbox" name="_trip_is_featured" value="1" <?php checked($featured, '1'); ?>>
+            Yes, show in Hero Slider
+        </label>
+    </p>
+    <?php
 }
 
 function render_trip_context_box($post) {
@@ -197,7 +208,7 @@ function save_trip_meta($post_id) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
-    $fields = ['_trip_tag_year', '_trip_airline', '_trip_route', '_trip_price', '_trip_subtitle', '_trip_highlights', '_trip_min_pax', '_trip_deposit', '_trip_infant_price', '_trip_visa_note', '_trip_payment_terms'];
+    $fields = ['_trip_tag_year', '_trip_airline', '_trip_route', '_trip_price', '_trip_subtitle', '_trip_highlights', '_trip_min_pax', '_trip_deposit', '_trip_infant_price', '_trip_visa_note', '_trip_payment_terms', '_trip_is_featured'];
     foreach($fields as $f) { if(isset($_POST[$f])) update_post_meta($post_id, $f, sanitize_text_field($_POST[$f])); }
 
     $rich = ['_trip_includes', '_trip_excludes', '_trip_optional', '_trip_terms'];

@@ -422,3 +422,29 @@ function nextur_get_term_image_url($term_id = null, $taxonomy = 'destination') {
     // 3. Fallback
     return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80'; 
 }
+
+/* -------------------------------------------------------------------------- */
+/* PHASE 3: BLOG & UTILITIES                                                  */
+/* -------------------------------------------------------------------------- */
+
+// 1. Customize Excerpt Length (20 words)
+function nextur_custom_excerpt_length($length) {
+    return 20;
+}
+add_filter('excerpt_length', 'nextur_custom_excerpt_length', 999);
+
+// 2. Customize Excerpt "Read More" String
+function nextur_excerpt_more($more) {
+    return '...';
+}
+add_filter('excerpt_more', 'nextur_excerpt_more');
+
+// 3. Helper: Get Random Trips for Sidebar Cross-Sell
+function nextur_get_random_trips($count = 3) {
+    $args = array(
+        'post_type'      => 'trip',
+        'posts_per_page' => $count,
+        'orderby'        => 'rand',
+    );
+    return new WP_Query($args);
+}

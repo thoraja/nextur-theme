@@ -422,6 +422,77 @@
             </div>
         </div>
     </section>
+
+    <section class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div class="text-center md:text-left mb-6 md:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 font-heading">Travel Journal</h2>
+                    <p class="mt-2 text-slate-600">Inspirasi, tips, dan cerita perjalanan terbaru.</p>
+                </div>
+                <a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" class="text-sm font-bold text-brand hover:text-slate-900 transition flex items-center gap-2 group">
+                    Lihat Semua Artikel 
+                    <span class="transform group-hover:translate-x-1 transition">→</span>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <?php
+                // Query 3 Latest Posts
+                $journal_query = new WP_Query(array(
+                    'post_type'      => 'post',
+                    'posts_per_page' => 3,
+                    'ignore_sticky_posts' => 1
+                ));
+
+                if ($journal_query->have_posts()) :
+                    while ($journal_query->have_posts()) : $journal_query->the_post();
+                        $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : 'https://via.placeholder.com/600x400?text=Nextur+Journal';
+                        $cats = get_the_category();
+                        $cat_name = !empty($cats) ? $cats[0]->name : 'Travel';
+                ?>
+                    <article class="group flex flex-col h-full bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100">
+                        
+                        <a href="<?php the_permalink(); ?>" class="relative h-56 overflow-hidden block">
+                            <img src="<?php echo esc_url($img_url); ?>" 
+                                 alt="<?php the_title(); ?>" 
+                                 class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
+                            <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
+                        </a>
+
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                                <span class="text-brand"><?php echo esc_html($cat_name); ?></span>
+                                <span>•</span>
+                                <span><?php echo get_the_date('M d, Y'); ?></span>
+                            </div>
+
+                            <h3 class="text-xl font-bold text-slate-900 font-heading mb-3 leading-snug line-clamp-2 group-hover:text-brand transition">
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                            </h3>
+
+                            <div class="mt-auto pt-4">
+                                <a href="<?php the_permalink(); ?>" class="inline-flex items-center text-sm font-bold text-slate-600 group-hover:text-brand transition">
+                                    Read Article <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                <?php 
+                    endwhile; 
+                    wp_reset_postdata();
+                else :
+                ?>
+                    <div class="col-span-3 text-center py-12 bg-white rounded-xl border border-dashed border-slate-200">
+                        <p class="text-slate-400">Belum ada artikel terbaru.</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+        </div>
+    </section>
 </main>
 
 <?php get_footer(); ?>

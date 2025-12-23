@@ -33,6 +33,14 @@ function nextur_scripts() {
 }
 add_action('wp_enqueue_scripts', 'nextur_scripts');
 
+// NEW: Ensure Media Uploader scripts are loaded in Admin for the Gallery
+function nextur_admin_scripts() {
+    if (is_admin()) {
+        wp_enqueue_media();
+    }
+}
+add_action('admin_enqueue_scripts', 'nextur_admin_scripts');
+
 function nextur_menu_classes($classes, $item, $args) {
     if($args->theme_location == 'primary') {
         $classes[] = 'text-current hover:text-brand font-medium transition duration-300 cursor-pointer';
@@ -94,6 +102,8 @@ function nextur_add_meta_boxes() {
     add_meta_box('trip_itinerary_box', '3. Dynamic Itinerary', 'render_trip_itinerary_box', 'trip', 'normal', 'high');
     add_meta_box('trip_financial_box', '4. Financials & Rules', 'render_trip_financial_box', 'trip', 'normal', 'high');
     add_meta_box('trip_details_box', '5. Full Details', 'render_trip_details_box', 'trip', 'normal', 'high');
+    // RESTORED: Gallery Box
+    add_meta_box('trip_gallery_box', '6. Trip Gallery', 'render_trip_gallery_box', 'trip', 'normal', 'high');
 }
 add_action('add_meta_boxes', 'nextur_add_meta_boxes');
 
@@ -208,13 +218,64 @@ function render_trip_details_box($post) {
     echo '<hr><h4>Terms & Conditions</h4>'; wp_editor($terms, '_trip_terms', $args);
 }
 
+// RESTORED: Gallery Render Callback
+function render_trip_gallery_box($post) {
+    $gallery_ids = get_post_meta($post->ID, '_trip_gallery', true);
+    ?>
+    <div id="trip_gallery_wrapper">
+        <input type="hidden" id="trip_gallery" name="_trip_gallery" value="<?php echo esc_attr($gallery_ids); ?>">
+        <div id="gallery_preview" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+            <?php if($gallery_ids):
+                $ids = explode(',', $gallery_ids);
+                foreach($ids as $id):
+                    $img = wp_get_attachment_image_url($id, 'thumbnail');
+                    if($img) echo '<div style="position:relative;"><img src="'.$img.'" style="width:80px; height:80px; object-fit:cover; border-radius:4px; border:1px solid #ddd;"></div>';
+                endforeach;
+            endif; ?>
+        </div>
+        <button type="button" class="button" id="manage_gallery">Select/Edit Images</button>
+        <p class="description">Select multiple images to appear in the "Gallery" tab.</p>
+    </div>
+    <script>
+    jQuery(document).ready(function($){
+        var frame;
+        $('#manage_gallery').click(function(e){
+            e.preventDefault();
+            if(frame) { frame.open(); return; }
+            frame = wp.media({
+                title: 'Select Trip Gallery Images',
+                button: { text: 'Use these images' },
+                multiple: true
+            });
+            frame.on('select', function(){
+                var selection = frame.state().get('selection');
+                var ids = [];
+                $('#gallery_preview').html('');
+                selection.map(function(attachment){
+                    attachment = attachment.toJSON();
+                    ids.push(attachment.id);
+                    if(attachment.type === 'image'){
+                        var url = attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url;
+                        $('#gallery_preview').append('<img src="'+url+'" style="width:80px; height:80px; object-fit:cover; border-radius:4px; border:1px solid #ddd; margin-right:5px;">');
+                    }
+                });
+                $('#trip_gallery').val(ids.join(','));
+            });
+            frame.open();
+        });
+    });
+    </script>
+    <?php
+}
+
 /* --- SAVE LOGIC --- */
 function save_trip_meta($post_id) {
     if (!isset($_POST['trip_nonce']) || !wp_verify_nonce($_POST['trip_nonce'], 'save_trip_meta')) return;
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
-    $fields = ['_trip_tag_year', '_trip_airline', '_trip_route', '_trip_price', '_trip_subtitle', '_trip_highlights', '_trip_min_pax', '_trip_deposit', '_trip_infant_price', '_trip_visa_note', '_trip_payment_terms', '_trip_is_featured'];
+    // UPDATED: Added '_trip_gallery' to the fields array
+    $fields = ['_trip_tag_year', '_trip_airline', '_trip_route', '_trip_price', '_trip_subtitle', '_trip_highlights', '_trip_min_pax', '_trip_deposit', '_trip_infant_price', '_trip_visa_note', '_trip_payment_terms', '_trip_is_featured', '_trip_gallery'];
     foreach($fields as $f) { if(isset($_POST[$f])) update_post_meta($post_id, $f, sanitize_text_field($_POST[$f])); }
 
     $rich = ['_trip_includes', '_trip_excludes', '_trip_optional', '_trip_terms'];
@@ -384,10 +445,6 @@ add_action('manage_gallery_item_posts_custom_column', 'nextur_gallery_custom_col
 /* -------------------------------------------------------------------------- */
 /* HELPER: SMART TERM IMAGE (The "Fallback" Logic)                            */
 /* -------------------------------------------------------------------------- */
-// Automatically finds a background image for Archive pages
-/* -------------------------------------------------------------------------- */
-/* HELPER: SMART TERM IMAGE (Fixed for Homepage)                              */
-/* -------------------------------------------------------------------------- */
 function nextur_get_term_image_url($term_id = null, $taxonomy = 'destination') {
     // 1. If we are on an archive page and no ID is provided, auto-detect
     if (!$term_id && is_tax()) {
@@ -448,3 +505,45 @@ function nextur_get_random_trips($count = 3) {
     );
     return new WP_Query($args);
 }
+
+/* -------------------------------------------------------------------------- */
+/* PHASE 3: MULTILINGUAL SUPPORT (POLYLANG)                                   */
+/* -------------------------------------------------------------------------- */
+
+function nextur_register_strings() {
+    if (function_exists('pll_register_string')) {
+        // Hero & General UI
+        pll_register_string('Nextur Theme', 'Jelajahi Sekarang', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Destinasi Pilihan', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Temukan paket perjalanan terbaik sesuai impian Anda.', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Jelajahi Dunia', 'Nextur UI'); // Fallback hero
+        
+        // Cards & Listings
+        pll_register_string('Nextur Theme', 'Mulai dari', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Lihat Detail', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Lihat Semua', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Detail', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Destinasi Populer', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Gaya Liburan', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Jelajahi Indonesia', 'Nextur UI');
+        
+        // Blog
+        pll_register_string('Nextur Theme', 'Artikel & Inspirasi', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Baca Selengkapnya', 'Nextur UI');
+        
+        // Navigation & Footer
+        pll_register_string('Nextur Theme', 'Hubungi Kami', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Tentang Kami', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Layanan', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Beranda', 'Nextur UI');
+        
+        // Single Trip Tabs & Labels
+        pll_register_string('Nextur Theme', 'Trip Highlights', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Itinerary', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Fasilitas', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Info Penting', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'S&K', 'Nextur UI');
+        pll_register_string('Nextur Theme', 'Start From', 'Nextur UI'); // Single Trip Price Label
+    }
+}
+add_action('init', 'nextur_register_strings');

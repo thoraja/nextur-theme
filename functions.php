@@ -512,38 +512,138 @@ function nextur_get_random_trips($count = 3) {
 
 function nextur_register_strings() {
     if (function_exists('pll_register_string')) {
-        // Hero & General UI
-        pll_register_string('Nextur Theme', 'Jelajahi Sekarang', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Destinasi Pilihan', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Temukan paket perjalanan terbaik sesuai impian Anda.', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Jelajahi Dunia', 'Nextur UI'); // Fallback hero
         
-        // Cards & Listings
-        pll_register_string('Nextur Theme', 'Mulai dari', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Lihat Detail', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Lihat Semua', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Detail', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Destinasi Populer', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Gaya Liburan', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Jelajahi Indonesia', 'Nextur UI');
+        // --- GROUP 1: Navigation ---
+        pll_register_string('Nextur Nav', 'Beranda', 'Navigation');
+        pll_register_string('Nextur Nav', 'Tentang Kami', 'Navigation');
+        pll_register_string('Nextur Nav', 'Layanan', 'Navigation');
+        pll_register_string('Nextur Nav', 'Artikel', 'Navigation'); 
+        pll_register_string('Nextur Nav', 'Hubungi Kami', 'Navigation');
         
-        // Blog
-        pll_register_string('Nextur Theme', 'Artikel & Inspirasi', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Baca Selengkapnya', 'Nextur UI');
+        // --- GROUP 2: Homepage Marketing ---
+        pll_register_string('Nextur Home', 'Jelajahi Pesona Indonesia', 'Homepage'); 
+        pll_register_string('Nextur Home', 'Temukan paket perjalanan terbaik sesuai impian Anda.', 'Homepage'); 
+        pll_register_string('Nextur Home', 'Jelajahi Sekarang', 'Homepage'); 
+        pll_register_string('Nextur Home', 'Destinasi Pilihan', 'Homepage'); 
+        pll_register_string('Nextur Home', 'Eksplorasi berdasarkan negara atau wilayah.', 'Homepage');
+        pll_register_string('Nextur Home', 'Lihat Semua', 'Homepage'); 
+        // pll_register_string('Nextur Home', 'Destinasi Populer', 'Homepage'); // Replaced by Destinasi Pilihan
+        pll_register_string('Nextur Home', 'Jelajahi Indonesia', 'Homepage'); 
+        pll_register_string('Nextur Home', 'Surga tropis di negeri sendiri.', 'Homepage'); 
+        pll_register_string('Nextur Home', 'Gaya Liburan', 'Homepage');
+        pll_register_string('Nextur Home', 'Temukan pengalaman sesuai minat Anda.', 'Homepage');
+
+        // --- GROUP 3: Values & Lifestyle ---
+        pll_register_string('Nextur Home', 'Kami mengintegrasikan estetika destinasi, nilai budaya, dan teknologi yang menciptakan pengalaman yang autentik dan berkelanjutan.', 'Homepage');
+        pll_register_string('Nextur Home', 'Lifestyle Creator', 'Homepage');
+        pll_register_string('Nextur Home', 'Fokus pada penyusunan liburan yang berkesan dan berdampak.', 'Homepage'); 
+        pll_register_string('Nextur Home', 'Personalized', 'Homepage');
+        pll_register_string('Nextur Home', 'Perjalanan dimaksimalkan sepenuhnya sesuai minat Anda.', 'Homepage'); 
+        pll_register_string('Nextur Home', 'One-Stop Solution', 'Homepage');
+        pll_register_string('Nextur Home', 'Mulai dari liburan impian hingga insentif perusahaan.', 'Homepage'); 
         
-        // Navigation & Footer
-        pll_register_string('Nextur Theme', 'Hubungi Kami', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Tentang Kami', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Layanan', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Beranda', 'Nextur UI');
-        
-        // Single Trip Tabs & Labels
-        pll_register_string('Nextur Theme', 'Trip Highlights', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Itinerary', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Fasilitas', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Info Penting', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'S&K', 'Nextur UI');
-        pll_register_string('Nextur Theme', 'Start From', 'Nextur UI'); // Single Trip Price Label
+        // --- GROUP 4: Trip Cards & Details ---
+        pll_register_string('Nextur Card', 'Mulai dari', 'Trip Card'); 
+        pll_register_string('Nextur Card', 'Lihat Detail', 'Trip Card');
+        pll_register_string('Nextur Trip', 'Trip Highlights', 'Trip Detail');
+        pll_register_string('Nextur Trip', 'Itinerary', 'Trip Detail');
+        pll_register_string('Nextur Trip', 'Fasilitas', 'Trip Detail'); 
+        pll_register_string('Nextur Trip', 'Info Penting', 'Trip Detail');
+        pll_register_string('Nextur Trip', 'S&K', 'Trip Detail'); 
+        pll_register_string('Nextur Trip', 'Galeri', 'Trip Detail');
+        pll_register_string('Nextur Trip', 'Unduh PDF', 'Trip Detail'); 
+        pll_register_string('Nextur Trip', 'Pesan via WhatsApp', 'Trip Detail');
+        pll_register_string('Nextur Card', 'Paket', 'Trip Card'); // The badge count label
+
+        // --- GROUP 5: Blog ---
+        pll_register_string('Nextur Home', 'Artikel & Inspirasi', 'Homepage'); 
+        pll_register_string('Nextur Blog', 'Inspirasi, tips, dan cerita perjalanan terbaru.', 'Blog'); 
+        pll_register_string('Nextur Blog', 'Lihat Semua Artikel', 'Blog'); 
+        pll_register_string('Nextur Home', 'Baca Selengkapnya', 'Homepage'); 
+
+        // --- GROUP 6: Footer ---
+        pll_register_string('Nextur Footer', 'Alamat Kantor', 'Footer');
+        pll_register_string('Nextur Footer', 'Ikuti Kami', 'Footer');
+        pll_register_string('Nextur Footer', 'Hak Cipta Dilindungi', 'Footer');
+        pll_register_string('Nextur Footer', 'Partner perjalanan terbaik Anda. Kami berkomitmen memberikan pengalaman wisata yang tak terlupakan dengan standar keamanan dan kenyamanan tertinggi.', 'Footer');
+        pll_register_string('Nextur Footer', 'Perusahaan', 'Footer');
+        pll_register_string('Nextur Footer', 'Jl. Sudirman Kav 12, Jakarta Selatan, 12190', 'Footer');
+        pll_register_string('Nextur Footer', 'Newsletter', 'Footer');
+        pll_register_string('Nextur Footer', 'Dapatkan info promo trip terbaru.', 'Footer');
+        pll_register_string('Nextur Footer', 'Email Anda', 'Footer'); 
+        pll_register_string('Nextur Footer', 'Langganan', 'Footer'); 
+        pll_register_string('Nextur Footer', 'Privacy Policy', 'Footer');
+        pll_register_string('Nextur Footer', 'Terms of Service', 'Footer');
+
+        // --- GROUP 7: Empty States (NEW) ---
+        pll_register_string('Nextur System', 'Belum ada trip.', 'System');
+        pll_register_string('Nextur System', 'Belum ada kategori destinasi.', 'System');
+        pll_register_string('Nextur System', 'Upload Trip baru untuk memunculkan destinasi.', 'System');
+        pll_register_string('Nextur System', 'Belum ada destinasi highlight.', 'System');
+        pll_register_string('Nextur System', 'Belum ada artikel terbaru.', 'System');
+        pll_register_string('Nextur System', 'Belum ada kategori aktivitas.', 'System');
+
+        // ... (Keep your existing Header/Home/Trip strings above this) ...
+
+        // --- GROUP 8: About Page ---
+        pll_register_string('Nextur About', 'Tentang Nextur', 'About Page');
+        pll_register_string('Nextur About', 'Visi & Filosofi', 'About Page');
+        pll_register_string('Nextur About', 'Bagi kami, masa depan bukan sekadar tujuan, tetapi jembatan antara keindahan destinasi dan kebutuhan pelanggan.', 'About Page'); // Quote
+        pll_register_string('Nextur About', 'Suatu perjalanan bukan lagi sekadar perpindahan, tetapi transformasi yang memperkaya perspektif. Kami berkomitmen untuk menghadirkan pengalaman yang tidak hanya membawa Anda ke tempat baru, tetapi juga memberikan nilai baru dalam hidup Anda.', 'About Page'); // Main Text
+        pll_register_string('Nextur About', 'Innovation with Purpose', 'About Page');
+        pll_register_string('Nextur About', 'Solusi desain untuk nilai nyata dan kebutuhan pasar.', 'About Page');
+        pll_register_string('Nextur About', 'Partnership for Growth', 'About Page');
+        pll_register_string('Nextur About', 'Kolaborasi sebagai perjalanan bersama. Pertumbuhan klien adalah keberhasilan kami.', 'About Page');
+        pll_register_string('Nextur About', 'Sustainable Impact', 'About Page');
+        pll_register_string('Nextur About', 'Memprioritaskan keberlanjutan untuk manfaat masa depan.', 'About Page');
+
+        // --- GROUP 9: Services Page ---
+        pll_register_string('Nextur Services', 'Layanan Kami', 'Services Page');
+        pll_register_string('Nextur Services', 'Solusi perjalanan komprehensif untuk kebutuhan Anda.', 'Services Page');
+        pll_register_string('Nextur Services', 'Tailored Travel Experiences', 'Services Page');
+        pll_register_string('Nextur Services', 'Perencanaan perjalanan personal untuk individu, kelompok, maupun korporasi.', 'Services Page');
+        pll_register_string('Nextur Services', 'Destination Management', 'Services Page');
+        pll_register_string('Nextur Services', 'Pengelolaan destinasi autentik dengan kolaborasi komunitas lokal.', 'Services Page');
+        pll_register_string('Nextur Services', 'Smart Travel Technology', 'Services Page');
+        pll_register_string('Nextur Services', 'Solusi teknologi untuk efisiensi, keamanan, dan kenyamanan.', 'Services Page');
+        pll_register_string('Nextur Services', 'Premium Hospitality', 'Services Page');
+        pll_register_string('Nextur Services', 'Perancangan pengalaman premium dari retret mewah hingga eksplorasi budaya.', 'Services Page');
+        pll_register_string('Nextur Services', 'Sustainable Tourism', 'Services Page');
+        pll_register_string('Nextur Services', 'Pengembangan pariwisata berkelanjutan untuk ketahanan jangka panjang.', 'Services Page');
+
+        // --- GROUP 10: Contact Page ---
+        pll_register_string('Nextur Contact', 'Kami siap membantu merencanakan liburan impian Anda.', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Informasi Kontak', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Kantor Pusat', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Telepon & WhatsApp', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Email', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Kirim Pesan', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Nama Lengkap', 'Contact Page'); // Label
+        pll_register_string('Nextur Contact', 'Nama Anda', 'Contact Page'); // Placeholder
+        pll_register_string('Nextur Contact', 'Email Address', 'Contact Page');
+        pll_register_string('Nextur Contact', 'email@contoh.com', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Pesan', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Tulis pesan Anda disini...', 'Contact Page');
+        pll_register_string('Nextur Contact', 'Kirim', 'Contact Page'); // Button
+        pll_register_string('Nextur Contact', 'Google Maps Area', 'Contact Page');
+
+        // --- GROUP 11: System Pages (Thank You & Accommodation) ---
+        pll_register_string('Nextur System', 'Terima Kasih!', 'System Page');
+        pll_register_string('Nextur System', 'Booking Anda telah kami terima. Tim kami akan segera menghubungi Anda melalui WhatsApp/Email untuk konfirmasi pembayaran.', 'System Page');
+        pll_register_string('Nextur System', 'Kembali ke Beranda', 'System Page');
+        pll_register_string('Nextur System', 'Accommodation', 'System Page');
+        pll_register_string('Nextur System', 'We are currently curating the best stay partners for you.', 'System Page');
+        pll_register_string('Nextur System', 'Coming Soon.', 'System Page');
+        pll_register_string('Nextur System', 'Back to Home', 'System Page');
     }
 }
 add_action('init', 'nextur_register_strings');
+
+// --- REGISTER MENUS ---
+function nextur_register_menus() {
+    register_nav_menus(array(
+        'header_menu' => 'Header Main Menu', // The new slot for the top menu
+        'footer_menu' => 'Footer Menu'       // Good practice to define this too
+    ));
+}
+add_action('after_setup_theme', 'nextur_register_menus');

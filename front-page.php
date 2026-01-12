@@ -18,7 +18,7 @@
             $slides_data[] = [
                 'id'    => get_the_ID(),
                 'image' => get_the_post_thumbnail_url(get_the_ID(), 'full'),
-                'title' => get_the_title(),
+                'title' => html_entity_decode(get_the_title()),
                 'link'  => get_permalink(),
                 'price' => get_post_meta(get_the_ID(), '_trip_price', true)
             ];
@@ -29,8 +29,8 @@
     if (empty($slides_data)) {
         $slides_data[] = [
             'id'    => 0,
-            'image' => 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=2021&q=80',
-            'title' => 'Jelajahi Dunia',
+            'image' => 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=2021&q=80', // Fallback image
+            'title' => function_exists('pll_e') ? pll__('Jelajahi Dunia') : __('Jelajahi Dunia', 'nextur'),
             'link'  => '#destinations',
             'price' => ''
         ];
@@ -99,7 +99,7 @@
                        x-transition:enter-start="opacity-0 scale-90"
                        x-transition:enter-end="opacity-100 scale-100"
                        class="absolute inset-0 flex items-center justify-center bg-white text-slate-900 hover:bg-brand hover:text-white font-bold text-base uppercase tracking-widest rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(2,132,199,0.6)] transition-all duration-300">
-                        Lihat Detail
+                        <?php pll_e('Lihat Detail'); ?>
                     </a>
                 </template>
             </div>
@@ -139,14 +139,14 @@
              }"
              x-init="$nextTick(() => updateScroll())"
              @resize.window.debounce.100ms="updateScroll()">
-             
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
+            <!-- <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
                 <div class="w-full md:w-auto">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 font-heading mb-2">Destinasi Pilihan</h2>
-                    <p class="text-slate-600 mb-6">Temukan paket perjalanan terbaik sesuai impian Anda.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 font-heading mb-2"><?php pll_e('Destinasi Pilihan'); ?></h2>
+                    <p class="text-slate-600 mb-6"><?php pll_e('Temukan paket perjalanan terbaik sesuai impian Anda.'); ?></p>
                     <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar max-w-full mask-linear">
-                        <button @click="activeCategory = 'all'; $refs.tripSlider.scrollTo({ left: 0, behavior: 'smooth' }); setTimeout(() => updateScroll(), 500)" :class="activeCategory === 'all' ? 'bg-brand text-white shadow-lg shadow-brand/30' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-5 py-2 rounded-full text-sm font-bold transition whitespace-nowrap flex-shrink-0">Semua</button>
+                        <button @click="activeCategory = 'all'; $refs.tripSlider.scrollTo({ left: 0, behavior: 'smooth' }); setTimeout(() => updateScroll(), 500)" :class="activeCategory === 'all' ? 'bg-brand text-white shadow-lg shadow-brand/30' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-5 py-2 rounded-full text-sm font-bold transition whitespace-nowrap flex-shrink-0"><?php pll_e('Semua'); ?></button>
                         <?php
                         $terms = get_terms(array('taxonomy' => 'destination', 'hide_empty' => true));
                         if (!empty($terms) && !is_wp_error($terms)) : foreach ($terms as $term) : ?>
@@ -154,7 +154,7 @@
                         <?php endforeach; endif; ?>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="relative -mx-4 md:mx-0">
                 <button @click="$refs.tripSlider.scrollBy({ left: -400, behavior: 'smooth' })" :disabled="atStart" :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 -ml-5 w-12 h-12 rounded-full items-center justify-center transition-all duration-300 bg-white/80 backdrop-blur-md border border-white/50 shadow-xl text-slate-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
@@ -167,7 +167,7 @@
                     if ($trips->have_posts()) : while ($trips->have_posts()) : $trips->the_post();
                         $id = get_the_ID();
                         $price = get_post_meta($id, '_trip_price', true);
-                        $formatted_price = $price ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Kami';
+                        $formatted_price = $price ? 'Rp ' . number_format($price, 0, ',', '.') : (function_exists('pll_e') ? pll__('Hubungi Kami') : __('Hubungi Kami', 'nextur'));
                         $airline = get_post_meta($id, '_trip_airline', true);
                         $year_tag = get_post_meta($id, '_trip_tag_year', true);
                         $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url($id, 'large') : 'https://via.placeholder.com/600x400';
@@ -195,17 +195,17 @@
                                 </div>
                                 <?php endif; ?>
                                 <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-                                    <div><span class="block text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Start from</span><span class="block text-brand font-bold font-heading text-lg"><?php echo $formatted_price; ?></span></div>
-                                    <span class="text-sm font-bold text-slate-900 hover:text-brand transition flex items-center gap-1 group-hover:translate-x-1 duration-300">Detail <span class="text-lg">→</span></span>
+                                    <div><span class="block text-[10px] text-slate-400 uppercase tracking-wider mb-0.5"><?php pll_e('Mulai dari'); ?></span><span class="block text-brand font-bold font-heading text-lg"><?php echo $formatted_price; ?></span></div>
+                                    <span class="text-sm font-bold text-slate-900 hover:text-brand transition flex items-center gap-1 group-hover:translate-x-1 duration-300"><?php pll_e('Detail'); ?> <span class="text-lg">→</span></span>
                                 </div>
                             </div>
                         </a>
                     <?php endwhile; wp_reset_postdata(); else : ?>
-                        <div class="w-full text-center py-12 bg-slate-50 rounded-xl border border-dashed border-slate-300"><p class="text-slate-500">Belum ada trip.</p></div>
+                        <div class="w-full text-center py-12 bg-slate-50 rounded-xl border border-dashed border-slate-300"><p class="text-slate-500"><?php pll_e('Belum ada trip.'); ?></p></div>
                     <?php endif; ?>
                     
-                    <a href="<?php echo site_url('/trips'); ?>" x-show="activeCategory === 'all'" class="flex-shrink-0 w-48 md:w-64 snap-center md:snap-start rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center hover:border-brand hover:bg-blue-50 transition group cursor-pointer relative z-10">
-                        <span class="text-3xl text-slate-400 group-hover:text-brand transition mb-2">➜</span><span class="font-bold text-slate-500 group-hover:text-brand transition">Lihat Semua</span>
+                    <a href="<?php echo site_url('/trips'); ?>" x-show="activeCategory === 'all'" class="flex-shrink-0 w-[85vw] md:w-64 snap-center md:snap-start rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center hover:border-brand hover:bg-blue-50 transition group cursor-pointer relative z-10">
+                        <span class="text-3xl text-slate-400 group-hover:text-brand transition mb-2">➜</span><span class="font-bold text-slate-500 group-hover:text-brand transition"><?php pll_e('Lihat Semua'); ?></span>
                     </a>
                 </div>
             </div>
@@ -220,8 +220,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-end mb-6">
                 <div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading">Gaya Liburan</h2>
-                    <p class="mt-1 text-slate-600 text-sm">Temukan pengalaman sesuai minat Anda.</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading"><?php pll_e('Gaya Liburan'); ?></h2>
+                    <p class="mt-1 text-slate-600 text-sm"><?php pll_e('Temukan pengalaman sesuai minat Anda.'); ?></p>
                 </div>
                 <div class="hidden md:flex gap-2">
                     <button @click="$refs.activitySlider.scrollBy({ left: -320, behavior: 'smooth' })" :disabled="atStart" :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">←</button>
@@ -245,7 +245,7 @@
                             </div>
                         </a>
                     <?php endforeach; else : ?>
-                        <div class="w-full text-center py-8 bg-white border border-dashed border-slate-300 rounded-xl"><p class="text-slate-400 text-xs">Belum ada kategori aktivitas.</p></div>
+                        <div class="w-full text-center py-8 bg-white border border-dashed border-slate-300 rounded-xl"><p class="text-slate-400 text-xs"><?php pll_e('Belum ada kategori aktivitas.'); ?></p></div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -266,10 +266,10 @@
              @resize.window.debounce.100ms="updateScroll()">
              
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-end mb-6">
+            <div class="flex justify-between items-end mb-6"> 
                 <div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading">Destinasi Populer</h2>
-                    <p class="mt-1 text-slate-600 text-sm">Eksplorasi berdasarkan negara atau wilayah.</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading"><?php pll_e('Destinasi Pilihan'); ?></h2>
+                    <p class="mt-1 text-slate-600 text-sm"><?php pll_e('Eksplorasi berdasarkan negara atau wilayah.'); ?></p>
                 </div>
                 
                 <div class="hidden md:flex gap-2">
@@ -295,11 +295,15 @@
                     
                     <?php
                     // 1. Get Destination Terms
-                    $destinations = get_terms(array(
+                    $dest_args = array(
                         'taxonomy'   => 'destination',
                         'hide_empty' => true, // Only show destinations that have trips
                         'number'     => 10
-                    ));
+                    );
+                    if (function_exists('pll_current_language')) {
+                        $dest_args['lang'] = pll_current_language();
+                    }
+                    $destinations = get_terms($dest_args);
 
                     if (!empty($destinations) && !is_wp_error($destinations)) :
                         foreach ($destinations as $term) :
@@ -318,13 +322,13 @@
                             
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
                             
-                            <div class="absolute bottom-0 left-0 p-4 w-full">
+                            <div class="absolute bottom-0 left-0 p-4 w-full"> 
                                 <h3 class="text-lg font-bold text-white font-heading tracking-wide leading-tight">
                                     <?php echo esc_html($term->name); ?>
                                 </h3>
                                 <div class="flex items-center gap-2 mt-1">
                                     <span class="text-[10px] font-medium text-white/80 bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                                        <?php echo $term->count; ?> Paket
+                                        <?php echo $term->count; ?> <?php pll_e('Paket'); ?>
                                     </span>
                                     <div class="h-0.5 w-0 bg-brand transition-all duration-300 group-hover:w-6"></div>
                                 </div>
@@ -335,9 +339,9 @@
                         endforeach; 
                     else :
                     ?>
-                        <div class="w-full text-center py-8 bg-white border border-dashed border-slate-300 rounded-xl">
-                            <p class="text-slate-400 text-xs">Belum ada kategori destinasi.</p>
-                            <p class="text-[10px] text-slate-300 mt-1">Upload Trip baru untuk memunculkan destinasi.</p>
+                        <div class="w-full text-center py-8 bg-white border border-dashed border-slate-300 rounded-xl"> 
+                            <p class="text-slate-400 text-xs"><?php pll_e('Belum ada kategori destinasi.'); ?></p>
+                            <p class="text-[10px] text-slate-300 mt-1"><?php pll_e('Upload Trip baru untuk memunculkan destinasi.'); ?></p>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -350,8 +354,8 @@
             
             <div class="flex justify-between items-end mb-6">
                 <div class="w-full md:w-auto">
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading mb-1">Jelajahi Indonesia</h2>
-                    <p class="text-slate-600 text-sm">Surga tropis di negeri sendiri.</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading mb-1"><?php pll_e('Jelajahi Indonesia'); ?></h2>
+                    <p class="text-slate-600 text-sm"><?php pll_e('Surga tropis di negeri sendiri.'); ?></p>
                 </div>
             </div>
 
@@ -383,12 +387,12 @@
                             <img src="<?php echo esc_url($img_url); ?>" alt="<?php the_title(); ?>" class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
                             <div class="absolute bottom-0 left-0 p-5 w-full">
-                                <h3 class="text-lg font-bold text-white font-heading tracking-wide mb-1"><?php the_title(); ?></h3>
+                                <h3 class="text-lg font-bold text-white font-heading tracking-wide mb-1"><?php the_title(); ?></h3> 
                                 <div class="h-0.5 w-8 bg-brand transition-all duration-300 group-hover:w-16"></div>
                             </div>
                         </a>
                     <?php endwhile; wp_reset_postdata(); else : ?>
-                        <div class="w-full text-center py-8 bg-white border border-dashed border-slate-300 rounded-xl"><p class="text-slate-400 text-xs">Belum ada destinasi highlight.</p></div>
+                        <div class="w-full text-center py-8 bg-white border border-dashed border-slate-300 rounded-xl"><p class="text-slate-400 text-xs"><?php pll_e('Belum ada destinasi highlight.'); ?></p></div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -399,26 +403,26 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-10">
                 <p class="text-xl md:text-2xl font-serif italic text-slate-800 leading-relaxed">
-                    "Kami mengintegrasikan estetika destinasi, nilai budaya, dan teknologi yang menciptakan pengalaman yang autentik dan berkelanjutan."
-                </p>
+                    "<?php pll_e('Kami mengintegrasikan estetika destinasi, nilai budaya, dan teknologi yang menciptakan pengalaman yang autentik dan berkelanjutan.'); ?>"
+                </p> 
                 <div class="w-16 h-1 bg-brand mx-auto mt-6"></div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="group p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-lg transition duration-300">
                     <div class="w-12 h-12 bg-blue-100 text-brand rounded-xl flex items-center justify-center text-xl mb-4">✨</div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2 font-heading">Lifestyle Creator</h3>
-                    <p class="text-slate-600 text-sm">Fokus pada penyusunan liburan yang berkesan dan berdampak.</p>
-                </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 font-heading"><?php pll_e('Lifestyle Creator'); ?></h3>
+                    <p class="text-slate-600 text-sm"><?php pll_e('Fokus pada penyusunan liburan yang berkesan dan berdampak.'); ?></p>
+                </div> 
                 <div class="group p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-lg transition duration-300">
                     <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl mb-4">🎯</div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2 font-heading">Personalized</h3>
-                    <p class="text-slate-600 text-sm">Perjalanan dimaksimalkan sepenuhnya sesuai minat Anda.</p>
-                </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 font-heading"><?php pll_e('Personalized'); ?></h3>
+                    <p class="text-slate-600 text-sm"><?php pll_e('Perjalanan dimaksimalkan sepenuhnya sesuai minat Anda.'); ?></p>
+                </div> 
                 <div class="group p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:shadow-lg transition duration-300">
                     <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-xl mb-4">💼</div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-2 font-heading">One-Stop Solution</h3>
-                    <p class="text-slate-600 text-sm">Mulai dari liburan impian hingga insentif perusahaan.</p>
-                </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 font-heading"><?php pll_e('One-Stop Solution'); ?></h3>
+                    <p class="text-slate-600 text-sm"><?php pll_e('Mulai dari liburan impian hingga insentif perusahaan.'); ?></p>
+                </div> 
             </div>
         </div>
     </section>
@@ -428,12 +432,12 @@
             
             <div class="flex flex-col md:flex-row justify-between items-end mb-12">
                 <div class="text-center md:text-left mb-6 md:mb-0">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 font-heading">Travel Journal</h2>
-                    <p class="mt-2 text-slate-600">Inspirasi, tips, dan cerita perjalanan terbaru.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 font-heading"><?php pll_e('Artikel & Inspirasi'); ?></h2>
+                    <p class="mt-2 text-slate-600"><?php pll_e('Inspirasi, tips, dan cerita perjalanan terbaru.'); ?></p>
                 </div>
-                <a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" class="text-sm font-bold text-brand hover:text-slate-900 transition flex items-center gap-2 group">
-                    Lihat Semua Artikel 
-                    <span class="transform group-hover:translate-x-1 transition">→</span>
+                <a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" class="text-sm font-bold text-brand hover:text-slate-900 transition flex items-center gap-2 group"> 
+                    <?php pll_e('Lihat Semua Artikel'); ?> 
+                    <span class="transform group-hover:translate-x-1 transition">→</span> 
                 </a>
             </div>
 
@@ -457,7 +461,7 @@
                         <a href="<?php the_permalink(); ?>" class="relative h-56 overflow-hidden block">
                             <img src="<?php echo esc_url($img_url); ?>" 
                                  alt="<?php the_title(); ?>" 
-                                 class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
+                                 class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"> 
                             <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
                         </a>
 
@@ -465,7 +469,7 @@
                             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
                                 <span class="text-brand"><?php echo esc_html($cat_name); ?></span>
                                 <span>•</span>
-                                <span><?php echo get_the_date('M d, Y'); ?></span>
+                                <span><?php echo get_the_date('M d, Y'); ?></span> 
                             </div>
 
                             <h3 class="text-xl font-bold text-slate-900 font-heading mb-3 leading-snug line-clamp-2 group-hover:text-brand transition">
@@ -474,7 +478,7 @@
 
                             <div class="mt-auto pt-4">
                                 <a href="<?php the_permalink(); ?>" class="inline-flex items-center text-sm font-bold text-slate-600 group-hover:text-brand transition">
-                                    Read Article <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                    <?php pll_e('Baca Selengkapnya'); ?> <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                                 </a>
                             </div>
                         </div>
@@ -485,8 +489,8 @@
                     wp_reset_postdata();
                 else :
                 ?>
-                    <div class="col-span-3 text-center py-12 bg-white rounded-xl border border-dashed border-slate-200">
-                        <p class="text-slate-400">Belum ada artikel terbaru.</p>
+                    <div class="col-span-3 text-center py-12 bg-white rounded-xl border border-dashed border-slate-200"> 
+                        <p class="text-slate-400"><?php pll_e('Belum ada artikel terbaru.'); ?></p>
                     </div>
                 <?php endif; ?>
             </div>

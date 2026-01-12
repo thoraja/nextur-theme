@@ -11,8 +11,8 @@ get_header();
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
         </div>
         <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-white font-heading">Layanan Kami</h1>
-            <p class="mt-4 text-slate-400 max-w-2xl mx-auto">Solusi perjalanan komprehensif untuk kebutuhan Anda.</p>
+            <h1 class="text-4xl md:text-5xl font-bold text-white font-heading"><?php pll_e('Layanan Kami'); ?></h1>
+            <p class="mt-4 text-slate-400 max-w-2xl mx-auto"><?php pll_e('Solusi perjalanan komprehensif untuk kebutuhan Anda.'); ?></p>
         </div>
     </section>
 
@@ -23,42 +23,32 @@ get_header();
                 
                 <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 border border-slate-100">
                     <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl mb-6">✈️</div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading">Tailored Travel Experiences</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Perencanaan perjalanan personal untuk individu, kelompok, maupun korporasi.
-                    </p>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading"><?php pll_e('Tailored Travel Experiences'); ?></h3>
+                    <p class="text-slate-600 text-sm leading-relaxed"><?php pll_e('Perencanaan perjalanan personal untuk individu, kelompok, maupun korporasi.'); ?></p>
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 border border-slate-100">
                     <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl mb-6">🗺️</div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading">Destination Management</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Pengelolaan destinasi autentik dengan kolaborasi komunitas lokal.
-                    </p>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading"><?php pll_e('Destination Management'); ?></h3>
+                    <p class="text-slate-600 text-sm leading-relaxed"><?php pll_e('Pengelolaan destinasi autentik dengan kolaborasi komunitas lokal.'); ?></p>
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 border border-slate-100">
                     <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl mb-6">📱</div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading">Smart Travel Technology</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Solusi teknologi untuk efisiensi, keamanan, dan kenyamanan.
-                    </p>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading"><?php pll_e('Smart Travel Technology'); ?></h3>
+                    <p class="text-slate-600 text-sm leading-relaxed"><?php pll_e('Solusi teknologi untuk efisiensi, keamanan, dan kenyamanan.'); ?></p>
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 border border-slate-100 lg:col-start-1 lg:col-end-2 lg:translate-x-[50%]">
                     <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl mb-6">💎</div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading">Premium Hospitality</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Perancangan pengalaman premium dari retret mewah hingga eksplorasi budaya.
-                    </p>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading"><?php pll_e('Premium Hospitality'); ?></h3>
+                    <p class="text-slate-600 text-sm leading-relaxed"><?php pll_e('Perancangan pengalaman premium dari retret mewah hingga eksplorasi budaya.'); ?></p>
                 </div>
 
                 <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition duration-300 border border-slate-100 lg:col-start-2 lg:col-end-3 lg:translate-x-[50%]">
                     <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl mb-6">🌿</div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading">Sustainable Tourism</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Pengembangan pariwisata berkelanjutan untuk ketahanan jangka panjang.
-                    </p>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 font-heading"><?php pll_e('Sustainable Tourism'); ?></h3>
+                    <p class="text-slate-600 text-sm leading-relaxed"><?php pll_e('Pengembangan pariwisata berkelanjutan untuk ketahanan jangka panjang.'); ?></p>
                 </div>
 
             </div>

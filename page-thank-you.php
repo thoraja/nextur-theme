@@ -13,13 +13,13 @@ get_header();
             <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
         </div>
         
-        <h1 class="text-4xl md:text-5xl font-bold text-white font-heading mb-6">Terima Kasih!</h1>
+        <h1 class="text-4xl md:text-5xl font-bold text-white font-heading mb-6"><?php pll_e('Terima Kasih!'); ?></h1>
         <p class="text-slate-300 text-lg mb-10 leading-relaxed">
-            Booking Anda telah kami terima. Tim kami akan segera menghubungi Anda melalui WhatsApp/Email untuk konfirmasi pembayaran.
+            <?php pll_e('Booking Anda telah kami terima. Tim kami akan segera menghubungi Anda melalui WhatsApp/Email untuk konfirmasi pembayaran.'); ?>
         </p>
         
         <a href="<?php echo home_url(); ?>" class="inline-block bg-brand hover:bg-brand-dark text-white font-bold py-3 px-8 rounded-full transition shadow-lg shadow-brand/20">
-            Kembali ke Beranda
+            <?php pll_e('Kembali ke Beranda'); ?>
         </a>
     </div>
 </main>

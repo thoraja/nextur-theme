@@ -8,7 +8,7 @@
                     <span class="font-bold text-2xl text-white">Nextur<span class="text-blue-600">.</span></span>
                 </div>
                 <p class="text-slate-400 text-sm leading-relaxed">
-                    Partner perjalanan terbaik Anda. Kami berkomitmen memberikan pengalaman wisata yang tak terlupakan dengan standar keamanan dan kenyamanan tertinggi.
+                    <?php pll_e('Partner perjalanan terbaik Anda. Kami berkomitmen memberikan pengalaman wisata yang tak terlupakan dengan standar keamanan dan kenyamanan tertinggi.'); ?>
                 </p>
                 <div class="flex space-x-4 pt-2">
                     <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition"><span class="sr-only">IG</span>📸</a>
@@ -18,7 +18,7 @@
             </div>
 
             <div>
-                <h3 class="text-white text-lg font-bold mb-6">Perusahaan</h3>
+                <h3 class="text-white text-lg font-bold mb-6"><?php pll_e('Perusahaan'); ?></h3>
                 <?php
                 wp_nav_menu(array(
                     'theme_location' => 'primary',
@@ -32,29 +32,29 @@
             </div>
 
             <div>
-                <h3 class="text-white text-lg font-bold mb-6">Hubungi Kami</h3>
+                <h3 class="text-white text-lg font-bold mb-6"><?php pll_e('Hubungi Kami'); ?></h3>
                 <ul class="space-y-4 text-sm">
                     <li class="flex items-start">
                         <span class="mr-3 text-blue-500">📍</span>
-                        <span>Jl. Sudirman Kav 12,<br>Jakarta Selatan, 12190</span>
+                        <span><?php pll_e('Jl. Sudirman Kav 12, Jakarta Selatan, 12190'); ?></span>
                     </li>
                     <li class="flex items-center">
                         <span class="mr-3 text-blue-500">📧</span>
-                        <a href="mailto:info@nextur.com" class="hover:text-blue-400 transition">info@nextur.com</a>
+                        <a href="mailto:info@nextur.com" class="hover:text-blue-400 transition"><?php pll_e('info@nextur.com'); ?></a>
                     </li>
                     <li class="flex items-center">
                         <span class="mr-3 text-blue-500">📱</span>
-                        <span>+62 812 9988 7766</span>
+                        <span><?php pll_e('+62 812 9988 7766'); ?></span>
                     </li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="text-white text-lg font-bold mb-6">Newsletter</h3>
-                <p class="text-slate-400 text-sm mb-4">Dapatkan info promo trip terbaru.</p>
+                <h3 class="text-white text-lg font-bold mb-6"><?php pll_e('Newsletter'); ?></h3>
+                <p class="text-slate-400 text-sm mb-4"><?php pll_e('Dapatkan info promo trip terbaru.'); ?></p>
                 <form class="space-y-2">
-                    <input type="email" placeholder="Email Anda" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white text-sm">
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition text-sm">Langganan</button>
+                    <input type="email" placeholder="<?php pll_e('Email Anda'); ?>" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:border-blue-500 text-white text-sm">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition text-sm"><?php pll_e('Langganan'); ?></button>
                 </form>
             </div>
         </div>
@@ -62,8 +62,8 @@
         <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p class="text-xs text-slate-500">&copy; <?php echo date('Y'); ?> Nextur Travel Agency. All rights reserved.</p>
             <div class="flex space-x-6 mt-4 md:mt-0 text-xs text-slate-500">
-                <a href="#" class="hover:text-white">Privacy Policy</a>
-                <a href="#" class="hover:text-white">Terms of Service</a>
+                <a href="#" class="hover:text-white"><?php pll_e('Privacy Policy'); ?></a>
+                <a href="#" class="hover:text-white"><?php pll_e('Terms of Service'); ?></a>
             </div>
         </div>
     </div>

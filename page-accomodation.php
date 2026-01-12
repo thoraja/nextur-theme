@@ -19,16 +19,16 @@ get_header();
         </div>
         
         <h1 class="text-4xl md:text-5xl font-bold text-white font-heading mb-4 tracking-tight">
-            Accommodation
+            <?php pll_e('Accommodation'); ?>
         </h1>
         
         <p class="text-slate-300 text-lg mb-10 leading-relaxed font-light">
-            We are currently curating the best stay partners for you. <br/>
-            <span class="text-brand font-semibold">Coming Soon.</span>
+            <?php pll_e('We are currently curating the best stay partners for you.'); ?> <br/>
+            <span class="text-brand font-semibold"><?php pll_e('Coming Soon.'); ?></span>
         </p>
         
         <a href="<?php echo home_url(); ?>" class="inline-flex items-center gap-2 bg-white text-slate-900 font-bold py-3 px-8 rounded-full hover:bg-slate-200 transition shadow-lg">
-            <span>←</span> Back to Home
+            <span>←</span> <?php pll_e('Back to Home'); ?>
         </a>
     </div>
 </main>

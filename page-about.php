@@ -11,7 +11,7 @@ get_header();
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
         </div>
         <div class="relative z-10 text-center px-4">
-            <h1 class="text-4xl md:text-6xl font-bold text-white font-heading">Tentang Nextur</h1>
+            <h1 class="text-4xl md:text-6xl font-bold text-white font-heading"><?php pll_e('Tentang Nextur'); ?></h1>
         </div>
     </section>
 
@@ -20,13 +20,13 @@ get_header();
             <div class="grid lg:grid-cols-2 gap-16 items-start">
                 
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-900 mb-8 font-heading">Visi & Filosofi</h2>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-8 font-heading"><?php pll_e('Visi & Filosofi'); ?></h2>
                     <div class="prose text-lg text-slate-600 font-sans leading-relaxed space-y-6">
                         <p class="font-medium text-slate-800">
-                            "Bagi kami, masa depan bukan sekadar tujuan, tetapi jembatan antara keindahan destinasi dan kebutuhan pelanggan."
+                            "<?php pll_e('Bagi kami, masa depan bukan sekadar tujuan, tetapi jembatan antara keindahan destinasi dan kebutuhan pelanggan.'); ?>"
                         </p>
                         <p>
-                            Suatu perjalanan bukan lagi sekadar perpindahan, tetapi transformasi yang memperkaya perspektif. Kami berkomitmen untuk menghadirkan pengalaman yang tidak hanya membawa Anda ke tempat baru, tetapi juga memberikan nilai baru dalam hidup Anda.
+                            <?php pll_e('Suatu perjalanan bukan lagi sekadar perpindahan, tetapi transformasi yang memperkaya perspektif. Kami berkomitmen untuk menghadirkan pengalaman yang tidak hanya membawa Anda ke tempat baru, tetapi juga memberikan nilai baru dalam hidup Anda.'); ?>
                         </p>
                     </div>
                 </div>
@@ -37,8 +37,8 @@ get_header();
                             <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-slate-900 font-heading">Innovation with Purpose</h3>
-                            <p class="text-slate-600 text-sm mt-1">Solusi desain untuk nilai nyata dan kebutuhan pasar.</p>
+                            <h3 class="text-lg font-bold text-slate-900 font-heading"><?php pll_e('Innovation with Purpose'); ?></h3>
+                            <p class="text-slate-600 text-sm mt-1"><?php pll_e('Solusi desain untuk nilai nyata dan kebutuhan pasar.'); ?></p>
                         </div>
                     </div>
 
@@ -47,8 +47,8 @@ get_header();
                             <svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-slate-900 font-heading">Partnership for Growth</h3>
-                            <p class="text-slate-600 text-sm mt-1">Kolaborasi sebagai perjalanan bersama. Pertumbuhan klien adalah keberhasilan kami.</p>
+                            <h3 class="text-lg font-bold text-slate-900 font-heading"><?php pll_e('Partnership for Growth'); ?></h3>
+                            <p class="text-slate-600 text-sm mt-1"><?php pll_e('Kolaborasi sebagai perjalanan bersama. Pertumbuhan klien adalah keberhasilan kami.'); ?></p>
                         </div>
                     </div>
 
@@ -57,8 +57,8 @@ get_header();
                             <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path></svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-slate-900 font-heading">Sustainable Impact</h3>
-                            <p class="text-slate-600 text-sm mt-1">Memprioritaskan keberlanjutan untuk manfaat masa depan.</p>
+                            <h3 class="text-lg font-bold text-slate-900 font-heading"><?php pll_e('Sustainable Impact'); ?></h3>
+                            <p class="text-slate-600 text-sm mt-1"><?php pll_e('Memprioritaskan keberlanjutan untuk manfaat masa depan.'); ?></p>
                         </div>
                     </div>
                 </div>

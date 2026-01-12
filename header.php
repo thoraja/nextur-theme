@@ -51,8 +51,8 @@
                 </a>
             </div>
 
-            <!-- Desktop Nav -->
-            <div class="hidden md:flex items-center">
+            <!-- Desktop Nav (Hidden on Tablet/Mobile) -->
+            <div class="hidden lg:flex items-center">
                 <div class="font-heading text-sm font-semibold tracking-wide mr-6 text-slate-600">
                     <?php
                         // FIX: Explicitly add a class to the UL to force flexbox layout
@@ -62,6 +62,7 @@
                             'menu_class'     => 'menu-flex-fix', // Changed from Tailwind classes to custom class for safety
                             'echo'           => true,
                             'depth'          => 1,
+                            'fallback_cb'    => false, // Prevent default page list if menu is missing
                         ));
                     ?>
                 </div>
@@ -96,16 +97,22 @@
                 </div>
 
                 <!-- CTA Button -->
-                <a href="<?php echo site_url('/contact'); ?>" 
+                <a href="<?php
+                    if (function_exists('pll_current_language') && pll_current_language('slug') === 'en') {
+                        echo site_url('/contact');
+                    } else {
+                        echo site_url('/hubungi-kami');
+                    }
+                ?>"
                    class="bg-brand text-white hover:bg-brand-dark px-6 py-2.5 rounded-full font-bold text-sm transition shadow-lg hover:shadow-xl font-heading transform hover:-translate-y-0.5">
                     <?php function_exists('pll_e') ? pll_e('Hubungi Kami') : _e('Hubungi Kami', 'nextur'); ?>
                 </a>
             </div>
 
             <!-- Mobile Trigger -->
-            <div class="flex items-center md:hidden">
-                <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" 
-                        class="focus:outline-none p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-600">
+            <div class="flex items-center lg:hidden">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" type="button"
+                        class="focus:outline-none p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-600 z-50 relative">
                     <svg class="h-6 w-6" x-show="!mobileMenuOpen" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -119,12 +126,12 @@
 
     <!-- Mobile Dropdown (Floating Bubble) -->
     <!-- Fixed: Added z-40 to sit behind the pill but above content -->
-    <div x-show="mobileMenuOpen" 
+    <div x-show="mobileMenuOpen"
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 -translate-y-2 scale-95"
          x-transition:enter-end="opacity-100 translate-y-0 scale-100"
          x-transition:leave="transition ease-in duration-150"
-         class="md:hidden mt-2 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden relative z-40" 
+         class="lg:hidden mt-2 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden relative z-40" 
          style="display: none;">
         
         <div class="px-6 pt-6 pb-8 space-y-1">
@@ -134,6 +141,7 @@
                     'container'      => false,
                     'menu_class'     => 'flex flex-col space-y-4 font-heading font-semibold text-lg list-none m-0 p-0 mobile-menu-link',
                     'echo'           => true,
+                    'fallback_cb'    => false, // Prevent default page list if menu is missing
                 ));
             ?>
             
@@ -153,7 +161,13 @@
             </div>
 
              <div class="pt-2">
-                <a href="<?php echo site_url('/contact'); ?>" class="block w-full text-center px-6 py-3 bg-brand !text-white font-bold rounded-xl shadow-md">
+                <a href="<?php
+                    if (function_exists('pll_current_language') && pll_current_language('slug') === 'en') {
+                        echo site_url('/contact');
+                    } else {
+                        echo site_url('/hubungi-kami');
+                    }
+                ?>" class="block w-full text-center px-6 py-3 bg-brand !text-white font-bold rounded-xl shadow-md">
                     <?php function_exists('pll_e') ? pll_e('Hubungi Kami') : _e('Hubungi Kami', 'nextur'); ?>
                 </a>
             </div>

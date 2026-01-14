@@ -299,82 +299,6 @@ function save_trip_meta($post_id) {
 }
 add_action('save_post', 'save_trip_meta');
 
-
-/* -------------------------------------------------------------------------- */
-/* PHASE 2: BOOKING LOGIC (RESTORED FROM YOUR CODE)                           */
-/* -------------------------------------------------------------------------- */
-function nextur_handle_booking() {
-    $name = sanitize_text_field($_POST['fullname']);
-    $email = sanitize_email($_POST['email']);
-    $phone = sanitize_text_field($_POST['whatsapp']);
-    $pax = intval($_POST['pax']);
-    $date = sanitize_text_field($_POST['date']);
-    $trip = sanitize_text_field($_POST['trip_name']);
-    $notes = sanitize_textarea_field($_POST['notes']);
-
-    $to = get_option('admin_email');
-    $subject = "New Booking: $trip ($name)";
-    $headers = array('Content-Type: text/html; charset=UTF-8');
-    
-    // Styled HTML Email
-    $message = '
-    <html>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <div style="max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
-            <div style="background-color: #0f172a; color: #ffffff; padding: 20px; text-align: center;">
-                <h2 style="margin:0;">Nextur Booking</h2>
-            </div>
-            <div style="padding: 20px; background-color: #f8fafc;">
-                <p style="margin-top:0;">Hello Admin,</p>
-                <p>You have received a new booking request. Here are the details:</p>
-                
-                <table style="width: 100%; border-collapse: collapse; background: #fff; margin-top: 15px;">
-                    <tr>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; width: 140px; color: #64748b;">Trip Name</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee; color: #0f172a;"><strong>'.$trip.'</strong></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Customer Name</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$name.'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Email</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$email.'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">WhatsApp</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$phone.'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Pax</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$pax.' Person(s)</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Date</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$date.'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Notes</td>
-                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.nl2br($notes).'</td>
-                    </tr>
-                </table>
-                
-                <p style="margin-top: 25px; font-size: 12px; color: #999; text-align: center;">
-                    Sent automatically from your website.
-                </p>
-            </div>
-        </div>
-    </body>
-    </html>
-    ';
-
-    wp_mail($to, $subject, $message, $headers);
-    wp_redirect(home_url('/thank-you'));
-    exit;
-}
-add_action('admin_post_submit_booking', 'nextur_handle_booking');
-add_action('admin_post_nopriv_submit_booking', 'nextur_handle_booking');
-
 /* -------------------------------------------------------------------------- */
 /* PHASE 2 ADD-ON: INDONESIA HIGHLIGHTS (Dynamic Gallery)                     */
 /* -------------------------------------------------------------------------- */
@@ -513,38 +437,44 @@ function nextur_get_random_trips($count = 3) {
 function nextur_register_strings() {
     if (function_exists('pll_register_string')) {
         
-        // --- GROUP 1: Navigation ---
+        // --- GROUP 1: GLOBAL COMPANY INFO (Editable Contact Details) ---
+        // Use group 'Company Info' to find these quickly
+        pll_register_string('Nextur Info', 'Jl. Sudirman Kav 12, Jakarta Selatan, 12190', 'Company Info', true); // Multiline address
+        pll_register_string('Nextur Info', '+62 812 3456 7890', 'Company Info'); // Phone Display
+        pll_register_string('Nextur Info', 'info@nextur.com', 'Company Info'); // Email
+        pll_register_string('Nextur Info', 'https://wa.me/6281234567890', 'Company Info'); // WhatsApp Link URL
+
+        // --- GROUP 2: NAVIGATION & MENUS ---
         pll_register_string('Nextur Nav', 'Beranda', 'Navigation');
         pll_register_string('Nextur Nav', 'Tentang Kami', 'Navigation');
         pll_register_string('Nextur Nav', 'Layanan', 'Navigation');
         pll_register_string('Nextur Nav', 'Artikel', 'Navigation'); 
         pll_register_string('Nextur Nav', 'Hubungi Kami', 'Navigation');
-        
-        // --- GROUP 2: Homepage Marketing ---
+
+        // --- GROUP 3: HOMEPAGE MARKETING ---
         pll_register_string('Nextur Home', 'Jelajahi Pesona Indonesia', 'Homepage'); 
         pll_register_string('Nextur Home', 'Temukan paket perjalanan terbaik sesuai impian Anda.', 'Homepage'); 
         pll_register_string('Nextur Home', 'Jelajahi Sekarang', 'Homepage'); 
         pll_register_string('Nextur Home', 'Destinasi Pilihan', 'Homepage'); 
         pll_register_string('Nextur Home', 'Eksplorasi berdasarkan negara atau wilayah.', 'Homepage');
         pll_register_string('Nextur Home', 'Lihat Semua', 'Homepage'); 
-        // pll_register_string('Nextur Home', 'Destinasi Populer', 'Homepage'); // Replaced by Destinasi Pilihan
         pll_register_string('Nextur Home', 'Jelajahi Indonesia', 'Homepage'); 
         pll_register_string('Nextur Home', 'Surga tropis di negeri sendiri.', 'Homepage'); 
         pll_register_string('Nextur Home', 'Gaya Liburan', 'Homepage');
         pll_register_string('Nextur Home', 'Temukan pengalaman sesuai minat Anda.', 'Homepage');
-
-        // --- GROUP 3: Values & Lifestyle ---
-        pll_register_string('Nextur Home', 'Kami mengintegrasikan estetika destinasi, nilai budaya, dan teknologi yang menciptakan pengalaman yang autentik dan berkelanjutan.', 'Homepage');
+        // Lifestyle Section
+        pll_register_string('Nextur Home', 'Kami mengintegrasikan estetika destinasi, nilai budaya, dan teknologi yang menciptakan pengalaman yang autentik dan berkelanjutan.', 'Homepage', true);
         pll_register_string('Nextur Home', 'Lifestyle Creator', 'Homepage');
         pll_register_string('Nextur Home', 'Fokus pada penyusunan liburan yang berkesan dan berdampak.', 'Homepage'); 
         pll_register_string('Nextur Home', 'Personalized', 'Homepage');
         pll_register_string('Nextur Home', 'Perjalanan dimaksimalkan sepenuhnya sesuai minat Anda.', 'Homepage'); 
         pll_register_string('Nextur Home', 'One-Stop Solution', 'Homepage');
         pll_register_string('Nextur Home', 'Mulai dari liburan impian hingga insentif perusahaan.', 'Homepage'); 
-        
-        // --- GROUP 4: Trip Cards & Details ---
+
+        // --- GROUP 4: TRIP CARDS & DETAILS ---
         pll_register_string('Nextur Card', 'Mulai dari', 'Trip Card'); 
         pll_register_string('Nextur Card', 'Lihat Detail', 'Trip Card');
+        pll_register_string('Nextur Card', 'Paket', 'Trip Card'); // The badge count label
         pll_register_string('Nextur Trip', 'Trip Highlights', 'Trip Detail');
         pll_register_string('Nextur Trip', 'Itinerary', 'Trip Detail');
         pll_register_string('Nextur Trip', 'Fasilitas', 'Trip Detail'); 
@@ -553,21 +483,19 @@ function nextur_register_strings() {
         pll_register_string('Nextur Trip', 'Galeri', 'Trip Detail');
         pll_register_string('Nextur Trip', 'Unduh PDF', 'Trip Detail'); 
         pll_register_string('Nextur Trip', 'Pesan via WhatsApp', 'Trip Detail');
-        pll_register_string('Nextur Card', 'Paket', 'Trip Card'); // The badge count label
 
-        // --- GROUP 5: Blog ---
+        // --- GROUP 5: BLOG SECTION ---
         pll_register_string('Nextur Home', 'Artikel & Inspirasi', 'Homepage'); 
         pll_register_string('Nextur Blog', 'Inspirasi, tips, dan cerita perjalanan terbaru.', 'Blog'); 
         pll_register_string('Nextur Blog', 'Lihat Semua Artikel', 'Blog'); 
         pll_register_string('Nextur Home', 'Baca Selengkapnya', 'Homepage'); 
 
-        // --- GROUP 6: Footer ---
+        // --- GROUP 6: FOOTER ---
         pll_register_string('Nextur Footer', 'Alamat Kantor', 'Footer');
         pll_register_string('Nextur Footer', 'Ikuti Kami', 'Footer');
         pll_register_string('Nextur Footer', 'Hak Cipta Dilindungi', 'Footer');
-        pll_register_string('Nextur Footer', 'Partner perjalanan terbaik Anda. Kami berkomitmen memberikan pengalaman wisata yang tak terlupakan dengan standar keamanan dan kenyamanan tertinggi.', 'Footer');
+        pll_register_string('Nextur Footer', 'Partner perjalanan terbaik Anda. Kami berkomitmen memberikan pengalaman wisata yang tak terlupakan dengan standar keamanan dan kenyamanan tertinggi.', 'Footer', true);
         pll_register_string('Nextur Footer', 'Perusahaan', 'Footer');
-        pll_register_string('Nextur Footer', 'Jl. Sudirman Kav 12, Jakarta Selatan, 12190', 'Footer');
         pll_register_string('Nextur Footer', 'Newsletter', 'Footer');
         pll_register_string('Nextur Footer', 'Dapatkan info promo trip terbaru.', 'Footer');
         pll_register_string('Nextur Footer', 'Email Anda', 'Footer'); 
@@ -575,66 +503,74 @@ function nextur_register_strings() {
         pll_register_string('Nextur Footer', 'Privacy Policy', 'Footer');
         pll_register_string('Nextur Footer', 'Terms of Service', 'Footer');
 
-        // --- GROUP 7: Empty States (NEW) ---
-        pll_register_string('Nextur System', 'Belum ada trip.', 'System');
-        pll_register_string('Nextur System', 'Belum ada kategori destinasi.', 'System');
-        pll_register_string('Nextur System', 'Upload Trip baru untuk memunculkan destinasi.', 'System');
-        pll_register_string('Nextur System', 'Belum ada destinasi highlight.', 'System');
-        pll_register_string('Nextur System', 'Belum ada artikel terbaru.', 'System');
-        pll_register_string('Nextur System', 'Belum ada kategori aktivitas.', 'System');
+        // --- GROUP 7: PAGE - ABOUT ---
+        // Filter by 'Page: About'
+        pll_register_string('Nextur About', 'Tentang Nextur', 'Page: About');
+        pll_register_string('Nextur About', 'Visi & Filosofi', 'Page: About');
+        pll_register_string('Nextur About', 'Bagi kami, masa depan bukan sekadar tujuan, tetapi jembatan antara keindahan destinasi dan kebutuhan pelanggan.', 'Page: About', true); // Quote
+        pll_register_string('Nextur About', 'Suatu perjalanan bukan lagi sekadar perpindahan, tetapi transformasi yang memperkaya perspektif. Kami berkomitmen untuk menghadirkan pengalaman yang tidak hanya membawa Anda ke tempat baru, tetapi juga memberikan nilai baru dalam hidup Anda.', 'Page: About', true); 
+        // About Values
+        pll_register_string('Nextur About', 'Innovation with Purpose', 'Page: About');
+        pll_register_string('Nextur About', 'Solusi desain untuk nilai nyata dan kebutuhan pasar.', 'Page: About', true);
+        pll_register_string('Nextur About', 'Partnership for Growth', 'Page: About');
+        pll_register_string('Nextur About', 'Kolaborasi sebagai perjalanan bersama. Pertumbuhan klien adalah keberhasilan kami.', 'Page: About', true);
+        pll_register_string('Nextur About', 'Sustainable Impact', 'Page: About');
+        pll_register_string('Nextur About', 'Memprioritaskan keberlanjutan untuk manfaat masa depan.', 'Page: About', true);
 
-        // ... (Keep your existing Header/Home/Trip strings above this) ...
+        // --- GROUP 8: PAGE - SERVICES (Merged & Cleaned) ---
+        // Filter by 'Page: Services'
+        pll_register_string('Nextur Services', 'Layanan Kami', 'Page: Services');
+        pll_register_string('Nextur Services', 'Solusi perjalanan komprehensif untuk kebutuhan Anda.', 'Page: Services');
+        // Service Card 1
+        pll_register_string('Nextur Services', 'Tailored Travel Experiences', 'Page: Services');
+        pll_register_string('Nextur Services', 'Perencanaan perjalanan personal untuk individu, kelompok, maupun korporasi.', 'Page: Services', true);
+        // Service Card 2
+        pll_register_string('Nextur Services', 'Destination Management', 'Page: Services');
+        pll_register_string('Nextur Services', 'Pengelolaan destinasi autentik dengan kolaborasi komunitas lokal.', 'Page: Services', true);
+        // Service Card 3
+        pll_register_string('Nextur Services', 'Smart Travel Technology', 'Page: Services');
+        pll_register_string('Nextur Services', 'Solusi teknologi untuk efisiensi, keamanan, dan kenyamanan.', 'Page: Services', true);
+        // Service Card 4
+        pll_register_string('Nextur Services', 'Premium Hospitality', 'Page: Services');
+        pll_register_string('Nextur Services', 'Perancangan pengalaman premium dari retret mewah hingga eksplorasi budaya.', 'Page: Services', true);
+        // Service Card 5
+        pll_register_string('Nextur Services', 'Sustainable Tourism', 'Page: Services');
+        pll_register_string('Nextur Services', 'Pengembangan pariwisata berkelanjutan untuk ketahanan jangka panjang.', 'Page: Services', true);
 
-        // --- GROUP 8: About Page ---
-        pll_register_string('Nextur About', 'Tentang Nextur', 'About Page');
-        pll_register_string('Nextur About', 'Visi & Filosofi', 'About Page');
-        pll_register_string('Nextur About', 'Bagi kami, masa depan bukan sekadar tujuan, tetapi jembatan antara keindahan destinasi dan kebutuhan pelanggan.', 'About Page'); // Quote
-        pll_register_string('Nextur About', 'Suatu perjalanan bukan lagi sekadar perpindahan, tetapi transformasi yang memperkaya perspektif. Kami berkomitmen untuk menghadirkan pengalaman yang tidak hanya membawa Anda ke tempat baru, tetapi juga memberikan nilai baru dalam hidup Anda.', 'About Page'); // Main Text
-        pll_register_string('Nextur About', 'Innovation with Purpose', 'About Page');
-        pll_register_string('Nextur About', 'Solusi desain untuk nilai nyata dan kebutuhan pasar.', 'About Page');
-        pll_register_string('Nextur About', 'Partnership for Growth', 'About Page');
-        pll_register_string('Nextur About', 'Kolaborasi sebagai perjalanan bersama. Pertumbuhan klien adalah keberhasilan kami.', 'About Page');
-        pll_register_string('Nextur About', 'Sustainable Impact', 'About Page');
-        pll_register_string('Nextur About', 'Memprioritaskan keberlanjutan untuk manfaat masa depan.', 'About Page');
+        // --- GROUP 9: PAGE - CONTACT ---
+        // Filter by 'Page: Contact'
+        pll_register_string('Nextur Contact', 'Hubungi Kami', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Kami siap membantu merencanakan liburan impian Anda.', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Informasi Kontak', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Kantor Pusat', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Telepon & WhatsApp', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Email', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Kirim Pesan', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Nama Lengkap', 'Page: Contact'); 
+        pll_register_string('Nextur Contact', 'Nama Anda', 'Page: Contact'); // Placeholder
+        pll_register_string('Nextur Contact', 'Email Address', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'email@contoh.com', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Pesan', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Tulis pesan Anda disini...', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Kirim', 'Page: Contact');
+        pll_register_string('Nextur Contact', 'Google Maps Area', 'Page: Contact');
 
-        // --- GROUP 9: Services Page ---
-        pll_register_string('Nextur Services', 'Layanan Kami', 'Services Page');
-        pll_register_string('Nextur Services', 'Solusi perjalanan komprehensif untuk kebutuhan Anda.', 'Services Page');
-        pll_register_string('Nextur Services', 'Tailored Travel Experiences', 'Services Page');
-        pll_register_string('Nextur Services', 'Perencanaan perjalanan personal untuk individu, kelompok, maupun korporasi.', 'Services Page');
-        pll_register_string('Nextur Services', 'Destination Management', 'Services Page');
-        pll_register_string('Nextur Services', 'Pengelolaan destinasi autentik dengan kolaborasi komunitas lokal.', 'Services Page');
-        pll_register_string('Nextur Services', 'Smart Travel Technology', 'Services Page');
-        pll_register_string('Nextur Services', 'Solusi teknologi untuk efisiensi, keamanan, dan kenyamanan.', 'Services Page');
-        pll_register_string('Nextur Services', 'Premium Hospitality', 'Services Page');
-        pll_register_string('Nextur Services', 'Perancangan pengalaman premium dari retret mewah hingga eksplorasi budaya.', 'Services Page');
-        pll_register_string('Nextur Services', 'Sustainable Tourism', 'Services Page');
-        pll_register_string('Nextur Services', 'Pengembangan pariwisata berkelanjutan untuk ketahanan jangka panjang.', 'Services Page');
-
-        // --- GROUP 10: Contact Page ---
-        pll_register_string('Nextur Contact', 'Kami siap membantu merencanakan liburan impian Anda.', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Informasi Kontak', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Kantor Pusat', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Telepon & WhatsApp', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Email', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Kirim Pesan', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Nama Lengkap', 'Contact Page'); // Label
-        pll_register_string('Nextur Contact', 'Nama Anda', 'Contact Page'); // Placeholder
-        pll_register_string('Nextur Contact', 'Email Address', 'Contact Page');
-        pll_register_string('Nextur Contact', 'email@contoh.com', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Pesan', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Tulis pesan Anda disini...', 'Contact Page');
-        pll_register_string('Nextur Contact', 'Kirim', 'Contact Page'); // Button
-        pll_register_string('Nextur Contact', 'Google Maps Area', 'Contact Page');
-
-        // --- GROUP 11: System Pages (Thank You & Accommodation) ---
-        pll_register_string('Nextur System', 'Terima Kasih!', 'System Page');
-        pll_register_string('Nextur System', 'Booking Anda telah kami terima. Tim kami akan segera menghubungi Anda melalui WhatsApp/Email untuk konfirmasi pembayaran.', 'System Page');
-        pll_register_string('Nextur System', 'Kembali ke Beranda', 'System Page');
-        pll_register_string('Nextur System', 'Accommodation', 'System Page');
-        pll_register_string('Nextur System', 'We are currently curating the best stay partners for you.', 'System Page');
-        pll_register_string('Nextur System', 'Coming Soon.', 'System Page');
-        pll_register_string('Nextur System', 'Back to Home', 'System Page');
+        // --- GROUP 10: SYSTEM PAGES (Thank You, Accommodation, Errors) ---
+        // Filter by 'Page: System'
+        pll_register_string('Nextur System', 'Terima Kasih!', 'Page: System');
+        pll_register_string('Nextur System', 'Booking Anda telah kami terima. Tim kami akan segera menghubungi Anda melalui WhatsApp/Email untuk konfirmasi pembayaran.', 'Page: System', true);
+        pll_register_string('Nextur System', 'Kembali ke Beranda', 'Page: System');
+        pll_register_string('Nextur System', 'Accommodation', 'Page: System');
+        pll_register_string('Nextur System', 'We are currently curating the best stay partners for you.', 'Page: System');
+        pll_register_string('Nextur System', 'Coming Soon.', 'Page: System');
+        pll_register_string('Nextur System', 'Back to Home', 'Page: System');
+        // Empty States
+        pll_register_string('Nextur System', 'Belum ada trip.', 'Page: System');
+        pll_register_string('Nextur System', 'Belum ada kategori destinasi.', 'Page: System');
+        pll_register_string('Nextur System', 'Upload Trip baru untuk memunculkan destinasi.', 'Page: System');
+        pll_register_string('Nextur System', 'Belum ada destinasi highlight.', 'Page: System');
+        pll_register_string('Nextur System', 'Belum ada artikel terbaru.', 'Page: System');
+        pll_register_string('Nextur System', 'Belum ada kategori aktivitas.', 'Page: System');
     }
 }
 add_action('init', 'nextur_register_strings');
@@ -647,3 +583,173 @@ function nextur_register_menus() {
     ));
 }
 add_action('after_setup_theme', 'nextur_register_menus');
+
+/* -------------------------------------------------------------------------- */
+/* PHASE 6: FORM HANDLERS (Contact & Booking)                                 */
+/* -------------------------------------------------------------------------- */
+
+// Helper: Get the Target Email
+function nextur_get_target_email() {
+    // Try to get the email from the Customizer setting we made earlier
+    $target = get_theme_mod('company_email');
+    
+    // If empty, fallback to the main WordPress Admin Email
+    if (empty($target)) {
+        $target = get_option('admin_email');
+    }
+    return $target;
+}
+
+// 1. HANDLE CONTACT FORM
+// 1. HANDLE CONTACT FORM (Styled Email)
+function nextur_handle_contact() {
+    // Security Check (Optional)
+    // if (!isset($_POST['contact_nonce']) || !wp_verify_nonce($_POST['contact_nonce'], 'submit_contact')) wp_die('Security check failed');
+
+    $name = sanitize_text_field($_POST['contact_name']);
+    $email = sanitize_email($_POST['contact_email']);
+    $message_content = sanitize_textarea_field($_POST['contact_message']);
+
+    $to = nextur_get_target_email(); // Sends to info@nextur.id (or customizer setting)
+    $subject = "New Inquiry from: $name";
+    
+    // Required headers for HTML email
+    $headers = array('Content-Type: text/html; charset=UTF-8', "Reply-To: $name <$email>");
+
+    // Styled HTML Email Template
+    $body = '
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>New Contact Message</title>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif; background-color: #f3f4f6;">
+        <div style="padding: 40px 0;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                
+                <div style="background-color: #0f172a; padding: 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 0.5px;">New Message</h1>
+                    <p style="color: #94a3b8; margin: 5px 0 0 0; font-size: 14px;">Nextur Website Inquiry</p>
+                </div>
+
+                <div style="padding: 32px; color: #334155;">
+                    
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
+                        <tr>
+                            <td width="50%" style="vertical-align: top; padding-right: 10px;">
+                                <p style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: bold; margin: 0 0 5px 0; letter-spacing: 1px;">Sender Name</p>
+                                <p style="font-size: 16px; color: #0f172a; margin: 0; font-weight: 500;">' . $name . '</p>
+                            </td>
+                            <td width="50%" style="vertical-align: top;">
+                                <p style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: bold; margin: 0 0 5px 0; letter-spacing: 1px;">Email Address</p>
+                                <p style="font-size: 16px; color: #0284c7; margin: 0;">
+                                    <a href="mailto:' . $email . '" style="color: #0284c7; text-decoration: none;">' . $email . '</a>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style="border-top: 1px solid #e2e8f0; padding-top: 24px;">
+                        <p style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: bold; margin: 0 0 12px 0; letter-spacing: 1px;">Message Content</p>
+                        <div style="background-color: #f8fafc; border-left: 4px solid #0284c7; padding: 20px; border-radius: 4px; color: #334155; line-height: 1.6;">
+                            ' . nl2br($message_content) . '
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
+                    <p style="font-size: 12px; color: #94a3b8; margin: 0;">
+                        &copy; ' . date("Y") . ' Nextur. All rights reserved.<br>
+                        Sent automatically from your website.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    ';
+
+    wp_mail($to, $subject, $body, $headers);
+
+    // Redirect back with success flag
+    wp_redirect(add_query_arg('sent', 'success', wp_get_referer()));
+    exit;
+}
+add_action('admin_post_submit_contact', 'nextur_handle_contact'); // For logged in users
+add_action('admin_post_nopriv_submit_contact', 'nextur_handle_contact'); // For guests
+
+// 2. HANDLE BOOKING FORM (Updated)
+function nextur_handle_booking() {
+    $name = sanitize_text_field($_POST['fullname']);
+    $email = sanitize_email($_POST['email']);
+    $phone = sanitize_text_field($_POST['whatsapp']);
+    $pax = intval($_POST['pax']);
+    $date = sanitize_text_field($_POST['date']);
+    $trip = sanitize_text_field($_POST['trip_name']);
+    $notes = sanitize_textarea_field($_POST['notes']);
+
+    $to = nextur_get_target_email(); // Sends to info@nextur.id
+    $subject = "New Booking Request: $trip";
+    $headers = array('Content-Type: text/html; charset=UTF-8', "Reply-To: $name <$email>");
+    
+    $message = '
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+            <div style="background-color: #0f172a; color: #ffffff; padding: 20px; text-align: center;">
+                <h2 style="margin:0;">Nextur Booking</h2>
+            </div>
+            <div style="padding: 20px; background-color: #f8fafc;">
+                <p style="margin-top:0;">Hello Admin,</p>
+                <p>You have received a new booking request. Here are the details:</p>
+                
+                <table style="width: 100%; border-collapse: collapse; background: #fff; margin-top: 15px;">
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; width: 140px; color: #64748b;">Trip Name</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; color: #0f172a;"><strong>'.$trip.'</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Customer Name</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$name.'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Email</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$email.'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">WhatsApp</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$phone.'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Pax</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$pax.' Person(s)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Date</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.$date.'</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee; font-weight: bold; color: #64748b;">Notes</td>
+                        <td style="padding: 12px; border-bottom: 1px solid #eee;">'.nl2br($notes).'</td>
+                    </tr>
+                </table>
+                
+                <p style="margin-top: 25px; font-size: 12px; color: #999; text-align: center;">
+                    Sent automatically from your website.
+                </p>
+            </div>
+        </div>
+    </body>
+    </html>
+    ';
+
+    wp_mail($to, $subject, $message, $headers);
+    
+    // Redirect to Thank You Page
+    wp_redirect(home_url('/thank-you')); // Ensure you have a page with slug 'thank-you'
+    exit;
+}
+add_action('admin_post_submit_booking', 'nextur_handle_booking');
+add_action('admin_post_nopriv_submit_booking', 'nextur_handle_booking');

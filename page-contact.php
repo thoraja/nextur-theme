@@ -34,7 +34,7 @@ get_header();
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-bold font-heading"><?php pll_e('Telepon & WhatsApp'); ?></h3>
-                                <p class="text-slate-300 text-sm mt-1"><?php pll_e('+62 812 9988 7766'); ?></p>
+                                <p class="text-slate-300 text-sm mt-1"><?php pll_e('+62 812 3456 7890'); ?></p>
                             </div>
                         </div>
 
@@ -52,20 +52,30 @@ get_header();
 
                 <div class="p-10 md:p-14">
                     <h2 class="text-2xl font-bold text-slate-900 mb-6 font-heading"><?php pll_e('Kirim Pesan'); ?></h2>
-                    <form action="#" method="POST" class="space-y-6">
+                    
+                    <?php if (isset($_GET['sent']) && $_GET['sent'] == 'success') : ?>
+                        <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-6 border border-green-200">
+                            ✅ Message sent successfully! We will reply shortly.
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" class="space-y-6">
+                        
+                        <input type="hidden" name="action" value="submit_contact">
+
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-2"><?php pll_e('Nama Lengkap'); ?></label>
-                            <input type="text" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-300 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition" placeholder="<?php pll_e('Nama Anda'); ?>">
+                            <input type="text" name="contact_name" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-300 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition" placeholder="<?php pll_e('Nama Anda'); ?>">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-2"><?php pll_e('Email Address'); ?></label>
-                            <input type="email" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-300 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition" placeholder="<?php pll_e('email@contoh.com'); ?>">
+                            <input type="email" name="contact_email" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-300 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition" placeholder="<?php pll_e('email@contoh.com'); ?>">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-2"><?php pll_e('Pesan'); ?></label>
-                            <textarea rows="4" class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-300 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition" placeholder="<?php pll_e('Tulis pesan Anda disini...'); ?>"></textarea>
+                            <textarea name="contact_message" rows="4" required class="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-300 focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition" placeholder="<?php pll_e('Tulis pesan Anda disini...'); ?>"></textarea>
                         </div>
-                        <button type="button" class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-4 rounded-lg transition duration-300 shadow-lg">
+                        <button type="submit" class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-4 rounded-lg transition duration-300 shadow-lg">
                             <?php pll_e('Kirim'); ?>
                         </button>
                     </form>
@@ -73,13 +83,5 @@ get_header();
             </div>
         </div>
     </section>
-
-    <div class="w-full h-96 bg-slate-200 flex items-center justify-center">
-        <div class="text-center text-slate-400">
-            <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
-            <p><?php pll_e('Google Maps Area'); ?></p>
-        </div>
-    </div>
 </main>
-
 <?php get_footer(); ?>

@@ -483,6 +483,7 @@ function nextur_register_strings() {
         pll_register_string('Nextur Trip', 'Galeri', 'Trip Detail');
         pll_register_string('Nextur Trip', 'Unduh PDF', 'Trip Detail'); 
         pll_register_string('Nextur Trip', 'Pesan via WhatsApp', 'Trip Detail');
+        pll_register_string('Nextur Trip', 'Belum ada foto galeri untuk trip ini.', 'Trip Detail');
 
         // --- GROUP 5: BLOG SECTION ---
         pll_register_string('Nextur Home', 'Artikel & Inspirasi', 'Homepage'); 
@@ -571,6 +572,17 @@ function nextur_register_strings() {
         pll_register_string('Nextur System', 'Belum ada destinasi highlight.', 'Page: System');
         pll_register_string('Nextur System', 'Belum ada artikel terbaru.', 'Page: System');
         pll_register_string('Nextur System', 'Belum ada kategori aktivitas.', 'Page: System');
+
+        // --- GROUP 11: BOOKING FORM ---
+        pll_register_string('Nextur Booking', 'Nama Lengkap', 'Booking Form');
+        pll_register_string('Nextur Booking', 'Email', 'Booking Form');
+        pll_register_string('Nextur Booking', 'WhatsApp', 'Booking Form');
+        pll_register_string('Nextur Booking', '0812...', 'Booking Form');
+        pll_register_string('Nextur Booking', 'Jumlah Peserta', 'Booking Form');
+        pll_register_string('Nextur Booking', 'Tanggal Keberangkatan', 'Booking Form');
+        pll_register_string('Nextur Booking', 'DD/MM/YYYY', 'Booking Form');
+        pll_register_string('Nextur Booking', 'Catatan (Opsional)', 'Booking Form');
+        pll_register_string('Nextur Booking', 'Kirim Pesan Booking', 'Booking Form');
     }
 }
 add_action('init', 'nextur_register_strings');

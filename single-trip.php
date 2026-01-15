@@ -113,27 +113,27 @@ $financials = [
                         <button @click="tab = 'itinerary'" 
                             :class="tab === 'itinerary' ? 'border-brand text-brand bg-white' : 'border-transparent text-slate-500 hover:text-slate-700'"
                             class="flex-1 py-4 px-4 font-bold text-sm border-b-2 transition whitespace-nowrap">
-                            Itinerary
+                            <?php pll_e('Itinerary'); ?>
                         </button>
                         <button @click="tab = 'inclusions'" 
                             :class="tab === 'inclusions' ? 'border-brand text-brand bg-white' : 'border-transparent text-slate-500 hover:text-slate-700'"
                             class="flex-1 py-4 px-4 font-bold text-sm border-b-2 transition whitespace-nowrap">
-                            Fasilitas
+                            <?php pll_e('Fasilitas'); ?>
                         </button>
                         <button @click="tab = 'financials'" 
                             :class="tab === 'financials' ? 'border-brand text-brand bg-white' : 'border-transparent text-slate-500 hover:text-slate-700'"
                             class="flex-1 py-4 px-4 font-bold text-sm border-b-2 transition whitespace-nowrap">
-                            Info Penting
+                            <?php pll_e('Info Penting'); ?>
                         </button>
                         <button @click="tab = 'gallery'" 
                             :class="tab === 'gallery' ? 'border-brand text-brand bg-white' : 'border-transparent text-slate-500 hover:text-slate-700'"
                             class="flex-1 py-4 px-4 font-bold text-sm border-b-2 transition whitespace-nowrap">
-                            Gallery
+                            <?php pll_e('Galeri'); ?>
                         </button>
                         <button @click="tab = 'terms'" 
                             :class="tab === 'terms' ? 'border-brand text-brand bg-white' : 'border-transparent text-slate-500 hover:text-slate-700'"
                             class="flex-1 py-4 px-4 font-bold text-sm border-b-2 transition whitespace-nowrap">
-                            S&K
+                            <?php pll_e('S&K'); ?>
                         </button>
                     </div>
 
@@ -287,7 +287,7 @@ $financials = [
 
                             <?php else: ?>
                                 <div class="text-center py-12 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                                    <p class="text-slate-400">Belum ada foto galeri untuk trip ini.</p>
+                                    <p class="text-slate-400"><?php pll_e('Belum ada foto galeri untuk trip ini.'); ?></p>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -318,7 +318,7 @@ $financials = [
                                 <?php if($financials['deposit']): ?>
                                 <div class="flex justify-between border-b border-white/10 pb-2">
                                     <span>Deposit</span>
-                                    <span class="font-semibold text-white"><?php echo esc_html($financials['deposit']); ?></span>
+                                    <span class="font-semibold text-white"><?php echo 'Rp ' . number_format($financials['deposit'], 0, ',', '.'); ?></span>
                                 </div>
                                 <?php endif; ?>
                             </div>

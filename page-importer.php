@@ -1,5 +1,5 @@
 <?php
-/* Template Name: Interactive Trip Importer (Bilingual) */
+/* Template Name: Interactive Trip Importer (Bilingual Fixed) */
 
 // SECURITY CHECK: Only Admins/Editors can access this
 if (!current_user_can('edit_posts')) {
@@ -8,28 +8,117 @@ if (!current_user_can('edit_posts')) {
 
 $results = [];
 
-// HELPER: Process a single language trip
-function nextur_create_trip_post($lang_data, $common_data, $lang_code) {
+/**
+ * HELPER: Handle Bilingual Taxonomy Terms (Destinations)
+ * Ensures terms exist in both languages and are linked.
+ */
+function nextur_ensure_bilingual_terms($term_names, $taxonomy = 'destination') {
+    $lang_terms = ['id' => [], 'en' => []];
+
+    if (!is_array($term_names)) return $lang_terms;
+
+    foreach ($term_names as $name) {
+        $name = trim($name);
+        if (empty($name)) continue;
+
+        // 1. Check/Create INDONESIAN Term
+        $term_id_id = nextur_get_or_create_term($name, $taxonomy, 'id');
+
+        // 2. Check/Create ENGLISH Term
+        // We append nothing to the name (names can be same), but Polylang tracks them by ID
+        $term_id_en = nextur_get_or_create_term($name, $taxonomy, 'en');
+
+        // 3. Link them if both exist
+        if ($term_id_id && $term_id_en && function_exists('pll_save_term_translations')) {
+            pll_save_term_translations([
+                'id' => $term_id_id,
+                'en' => $term_id_en
+            ]);
+        }
+
+        if ($term_id_id) $lang_terms['id'][] = (int) $term_id_id;
+        if ($term_id_en) $lang_terms['en'][] = (int) $term_id_en;
+    }
+
+    return $lang_terms;
+}
+
+/**
+ * HELPER: Get or Create a specific term in a specific language
+ */
+function nextur_get_or_create_term($name, $taxonomy, $lang_code) {
+    // Attempt to find term in this specific language
+    $terms = get_terms([
+        'taxonomy' => $taxonomy,
+        'name' => $name,
+        'hide_empty' => false,
+        'lang' => $lang_code // Polylang argument
+    ]);
+
+    if (!empty($terms) && !is_wp_error($terms)) {
+        return $terms[0]->term_id;
+    }
+
+    // Not found? Create it.
+    // NOTE: We temporarily switch lang to ensure creation happens in right bucket
+    $original_lang = pll_current_language();
+    
+    // Create term
+    $new_term = wp_insert_term($name, $taxonomy);
+    
+    if (is_wp_error($new_term)) {
+        // If error is "term exists", it might be in another language sharing slug. 
+        // Try to retrieve by ID if provided in error data, otherwise skip.
+        if (isset($new_term->error_data['term_exists'])) {
+            $existing_id = $new_term->error_data['term_exists'];
+            // Force language on existing term
+            pll_set_term_language($existing_id, $lang_code);
+            return $existing_id;
+        }
+        return false;
+    }
+
+    $term_id = $new_term['term_id'];
+    
+    // Explicitly set language
+    if (function_exists('pll_set_term_language')) {
+        pll_set_term_language($term_id, $lang_code);
+    }
+
+    return $term_id;
+}
+
+/**
+ * MAIN: Process a single language trip post
+ */
+function nextur_create_trip_post($lang_data, $common_data, $lang_code, $term_ids_for_lang) {
     if (empty($lang_data['title'])) return new WP_Error('missing_title', 'Title is required');
 
-    // 1. Check if post exists (by Title)
-    $existing = get_posts([
+    // 1. Check if post exists (by Title & Language)
+    // We use a detailed query to avoid overwriting the wrong language post
+    $args = [
         'post_type' => 'trip',
         'title'     => $lang_data['title'],
         'post_status' => ['publish', 'draft', 'pending', 'private'],
         'numberposts' => 1,
-        'lang' => '' // Query all languages
-    ]);
+        'lang' => $lang_code 
+    ];
+    $existing = get_posts($args);
 
     if ($existing) {
         $post_id = $existing[0]->ID;
         $is_update = true;
+        // Update content just in case
+        wp_update_post([
+            'ID' => $post_id,
+            'post_title' => $lang_data['title']
+        ]);
     } else {
-        // 2. Create New Post (DRAFT)
+        // 2. Create New Post
         $post_id = wp_insert_post([
             'post_title'   => $lang_data['title'],
             'post_type'    => 'trip',
-            'post_status'  => 'draft', 
+            'post_status'  => 'publish', // Force Publish so it appears
         ]);
         $is_update = false;
     }
@@ -41,21 +130,18 @@ function nextur_create_trip_post($lang_data, $common_data, $lang_code) {
         pll_set_post_language($post_id, $lang_code);
     }
 
-    // 4. Merge Meta Data (Common + Specific)
+    // 4. Merge Meta Data
     $all_meta = array_merge(
         isset($common_data['meta']) ? $common_data['meta'] : [],
         isset($lang_data['meta']) ? $lang_data['meta'] : []
     );
 
-    // Define fields that contain HTML (Inclusions, Terms, etc.)
     $html_fields = ['_trip_includes', '_trip_excludes', '_trip_optional', '_trip_terms', '_trip_payment_terms'];
 
     foreach ($all_meta as $key => $value) {
         if (in_array($key, $html_fields)) {
-            // Allow HTML tags for these specific fields
             update_post_meta($post_id, $key, wp_kses_post($value));
         } else {
-            // Standard sanitization for text fields
             update_post_meta($post_id, $key, sanitize_text_field($value));
         }
     }
@@ -65,9 +151,11 @@ function nextur_create_trip_post($lang_data, $common_data, $lang_code) {
         update_post_meta($post_id, '_trip_itinerary', $lang_data['itinerary']);
     }
 
-    // 6. Handle Destination (Common)
-    if (!empty($common_data['destination'])) {
-        wp_set_object_terms($post_id, $common_data['destination'], 'destination');
+    // 6. Handle Destination (Assign specific Term IDs for this language)
+    if (!empty($term_ids_for_lang)) {
+        // We use 'map' to ensure they are integers
+        $term_ids_for_lang = array_map('intval', $term_ids_for_lang);
+        wp_set_object_terms($post_id, $term_ids_for_lang, 'destination');
     }
 
     return ['id' => $post_id, 'status' => $is_update ? 'Updated' : 'Created'];
@@ -88,35 +176,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['json_data'])) {
         foreach ($trips as $index => $trip_pair) {
             
             if (!isset($trip_pair['id']) || !isset($trip_pair['en'])) {
-                $results[] = ['type' => 'error', 'msg' => "Item #$index skipped: Must contain keys 'id' and 'en'."];
+                $results[] = ['type' => 'error', 'msg' => "Item #$index skipped: Data incomplete."];
                 continue;
             }
 
             $common = isset($trip_pair['common']) ? $trip_pair['common'] : [];
+            
+            // --- STEP A: PREPARE TERMS (DESTINATIONS) ---
+            $term_ids = ['id' => [], 'en' => []];
+            if (!empty($common['destination'])) {
+                $term_ids = nextur_ensure_bilingual_terms($common['destination']);
+            }
 
-            // Process ID & EN
-            $res_id = nextur_create_trip_post($trip_pair['id'], $common, 'id');
-            $res_en = nextur_create_trip_post($trip_pair['en'], $common, 'en');
+            // --- STEP B: PROCESS POSTS ---
+            $res_id = nextur_create_trip_post($trip_pair['id'], $common, 'id', $term_ids['id']);
+            $res_en = nextur_create_trip_post($trip_pair['en'], $common, 'en', $term_ids['en']);
 
             if (is_wp_error($res_id) || is_wp_error($res_en)) {
                 $results[] = ['type' => 'error', 'msg' => "Error processing Item #$index."];
                 continue;
             }
 
-            // Link Translations
+            // --- STEP C: LINK TRANSLATIONS ---
             if (function_exists('pll_save_post_translations')) {
                 pll_save_post_translations([
                     'id' => $res_id['id'],
                     'en' => $res_en['id']
                 ]);
-                $linked_msg = " & Linked";
-            } else {
-                $linked_msg = " (Polylang missing)";
             }
 
             $results[] = [
                 'type' => 'success', 
-                'msg' => "<strong>Success:</strong> ID [{$res_id['status']}] + EN [{$res_en['status']}]$linked_msg for '{$trip_pair['id']['title']}'"
+                'msg' => "<strong>Success:</strong> ID [{$res_id['status']}] + EN [{$res_en['status']}] Linked. <br>Terms Linked: " . count($term_ids['id'])
             ];
         }
     }
@@ -129,8 +220,8 @@ get_header();
     <div class="max-w-5xl mx-auto px-4">
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div class="bg-slate-900 px-8 py-6 border-b border-slate-700">
-                <h1 class="text-2xl font-bold text-white font-heading">Bilingual Trip Vessel Creator</h1>
-                <p class="text-slate-400 text-sm mt-1">Paste your AI-generated JSON below. Supports HTML lists for Terms/Inclusions.</p>
+                <h1 class="text-2xl font-bold text-white font-heading">Bilingual Trip Vessel Creator (Fixed)</h1>
+                <p class="text-slate-400 text-sm mt-1">Paste your AI-generated JSON below. Now handles Bilingual Destinations correctly.</p>
             </div>
             <div class="p-8">
                 <?php if (!empty($results)): ?>

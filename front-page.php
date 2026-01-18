@@ -50,8 +50,8 @@
                 next() { this.active = (this.active + 1) % this.slides.length; },
                 prev() { this.active = (this.active - 1 + this.slides.length) % this.slides.length; },
                 handleSwipe() {
-                    if (this.touchEndX < this.touchStartX - 50) this.next(); // Swipe Left -> Next
-                    if (this.touchEndX > this.touchStartX + 50) this.prev(); // Swipe Right -> Prev
+                    if (this.touchEndX < this.touchStartX - 50) this.next(); 
+                    if (this.touchEndX > this.touchStartX + 50) this.prev(); 
                 }
              }"
              @mouseenter="stopTimer()" 
@@ -71,7 +71,6 @@
         <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-slate-900/30 z-20"></div>
 
         <div class="absolute inset-0 z-30 flex flex-col items-center justify-center text-center px-4 pt-16">
-            
             <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white tracking-tight mb-6 leading-none font-heading drop-shadow-2xl">
                 NEXTUR<br/>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-teal-400">
@@ -103,15 +102,12 @@
                     </a>
                 </template>
             </div>
-
         </div>
 
-        <button @click="prev()" 
-                class="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-40 p-4 text-white/50 hover:text-white hover:scale-110 transition duration-300 focus:outline-none">
+        <button @click="prev()" class="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-40 p-4 text-white/50 hover:text-white hover:scale-110 transition duration-300 focus:outline-none">
             <svg class="w-12 h-12 drop-shadow-md" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
         </button>
-        <button @click="next()" 
-                class="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-40 p-4 text-white/50 hover:text-white hover:scale-110 transition duration-300 focus:outline-none">
+        <button @click="next()" class="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-40 p-4 text-white/50 hover:text-white hover:scale-110 transition duration-300 focus:outline-none">
             <svg class="w-12 h-12 drop-shadow-md" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
         </button>
 
@@ -123,7 +119,6 @@
                 </button>
             </template>
         </div>
-
     </section>
 
     <section id="destinations" class="py-16 md:py-20 bg-white" 
@@ -141,23 +136,9 @@
              @resize.window.debounce.100ms="updateScroll()">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
-                <div class="w-full md:w-auto">
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 font-heading mb-2"><?php pll_e('Destinasi Pilihan'); ?></h2>
-                    <p class="text-slate-600 mb-6"><?php pll_e('Temukan paket perjalanan terbaik sesuai impian Anda.'); ?></p>
-                    <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar max-w-full mask-linear">
-                        <button @click="activeCategory = 'all'; $refs.tripSlider.scrollTo({ left: 0, behavior: 'smooth' }); setTimeout(() => updateScroll(), 500)" :class="activeCategory === 'all' ? 'bg-brand text-white shadow-lg shadow-brand/30' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-5 py-2 rounded-full text-sm font-bold transition whitespace-nowrap flex-shrink-0"><?php pll_e('Semua'); ?></button>
-                        <?php
-                        $terms = get_terms(array('taxonomy' => 'destination', 'hide_empty' => true));
-                        if (!empty($terms) && !is_wp_error($terms)) : foreach ($terms as $term) : ?>
-                            <button @click="activeCategory = '<?php echo esc_js($term->slug); ?>'; $refs.tripSlider.scrollTo({ left: 0, behavior: 'smooth' }); setTimeout(() => updateScroll(), 500)" :class="activeCategory === '<?php echo esc_js($term->slug); ?>' ? 'bg-brand text-white shadow-lg shadow-brand/30' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'" class="px-5 py-2 rounded-full text-sm font-bold transition whitespace-nowrap flex-shrink-0"><?php echo esc_html($term->name); ?></button>
-                        <?php endforeach; endif; ?>
-                    </div>
-                </div>
-            </div> -->
-
             <div class="relative -mx-4 md:mx-0">
                 <button @click="$refs.tripSlider.scrollBy({ left: -400, behavior: 'smooth' })" :disabled="atStart" :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 -ml-5 w-12 h-12 rounded-full items-center justify-center transition-all duration-300 bg-white/80 backdrop-blur-md border border-white/50 shadow-xl text-slate-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                
                 <button @click="$refs.tripSlider.scrollBy({ left: 400, behavior: 'smooth' })" :disabled="atEnd" :class="atEnd ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 -mr-5 w-12 h-12 rounded-full items-center justify-center transition-all duration-300 bg-white/80 backdrop-blur-md border border-white/50 shadow-xl text-slate-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
 
                 <div x-ref="tripSlider" @scroll.debounce.10ms="updateScroll()" class="flex gap-4 md:gap-8 overflow-x-auto pb-12 pt-4 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
@@ -212,7 +193,7 @@
         </div>
     </section>
 
-    <!-- <section class="py-10 bg-slate-50 border-t border-slate-200" 
+    <section class="py-10 bg-slate-50 border-t border-slate-200" 
              x-data="{ 
                 atStart: true, atEnd: false,
                 updateScroll() { const el = $refs.activitySlider; this.atStart = el.scrollLeft <= 5; this.atEnd = Math.ceil(el.scrollLeft + el.clientWidth) >= el.scrollWidth - 10; }
@@ -223,25 +204,26 @@
                     <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading"><?php pll_e('Gaya Liburan'); ?></h2>
                     <p class="mt-1 text-slate-600 text-sm"><?php pll_e('Temukan pengalaman sesuai minat Anda.'); ?></p>
                 </div>
-                <div class="hidden md:flex gap-2">
-                    <button @click="$refs.activitySlider.scrollBy({ left: -320, behavior: 'smooth' })" :disabled="atStart" :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">←</button>
-                    <button @click="$refs.activitySlider.scrollBy({ left: 320, behavior: 'smooth' })" :disabled="atEnd" :class="atEnd ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">→</button>
                 </div>
-            </div>
+            
             <div class="relative -mx-4 md:mx-0">
-                <div x-ref="activitySlider" @scroll.debounce.10ms="updateScroll()" class="flex gap-4 md:gap-6 overflow-x-auto pb-4 pt-2 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
+                <button @click="$refs.activitySlider.scrollBy({ left: -280, behavior: 'smooth' })" :disabled="atStart" :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 -ml-5 w-12 h-12 rounded-full items-center justify-center transition-all duration-300 bg-white/80 backdrop-blur-md border border-white/50 shadow-xl text-slate-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                
+                <button @click="$refs.activitySlider.scrollBy({ left: 280, behavior: 'smooth' })" :disabled="atEnd" :class="atEnd ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 -mr-5 w-12 h-12 rounded-full items-center justify-center transition-all duration-300 bg-white/80 backdrop-blur-md border border-white/50 shadow-xl text-slate-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+
+                <div x-ref="activitySlider" @scroll.debounce.10ms="updateScroll()" class="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
                     <?php
                     $activities = get_terms(array('taxonomy' => 'activity', 'hide_empty' => true));
                     if (!empty($activities) && !is_wp_error($activities)) : foreach ($activities as $term) :
                         $img_url = nextur_get_term_image_url($term->term_id);
                         $link = get_term_link($term);
                     ?>
-                        <a href="<?php echo esc_url($link); ?>" class="relative flex-shrink-0 w-60 md:w-72 aspect-[4/3] snap-center md:snap-start rounded-xl overflow-hidden group bg-slate-200 shadow hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                            <img src="<?php echo esc_url($img_url); ?>" class="h-full w-full object-cover transition duration-700 group-hover:scale-110 filter brightness-90 group-hover:brightness-100">
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition"></div>
-                            <div class="absolute inset-0 flex flex-col items-center justify-center p-4">
-                                <h3 class="text-lg font-bold text-white font-heading tracking-wide drop-shadow-md text-center"><?php echo esc_html($term->name); ?></h3>
-                                <span class="mt-2 text-[10px] font-medium text-white/90 bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/30 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition duration-300"><?php echo $term->count; ?> Trips</span>
+                        <a href="<?php echo esc_url($link); ?>" class="flex-shrink-0 w-[60vw] md:w-64 aspect-[3/4] snap-center md:snap-start relative overflow-hidden rounded-xl bg-slate-200 group block shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 z-10">
+                            <img src="<?php echo esc_url($img_url); ?>" class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
+                            <div class="absolute bottom-0 left-0 p-5 w-full">
+                                <h3 class="text-lg font-bold text-white font-heading tracking-wide mb-1"><?php echo esc_html($term->name); ?></h3>
+                                <div class="h-0.5 w-8 bg-brand transition-all duration-300 group-hover:w-16"></div>
                             </div>
                         </a>
                     <?php endforeach; else : ?>
@@ -250,7 +232,7 @@
                 </div>
             </div>
         </div>
-    </section> -->
+    </section>
 
     <section class="py-10 bg-white border-t border-slate-200" 
              x-data="{ 
@@ -271,33 +253,21 @@
                     <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading"><?php pll_e('Destinasi Pilihan'); ?></h2>
                     <p class="mt-1 text-slate-600 text-sm"><?php pll_e('Eksplorasi berdasarkan negara atau wilayah.'); ?></p>
                 </div>
-                
-                <div class="hidden md:flex gap-2">
-                    <button @click="$refs.destSlider.scrollBy({ left: -240, behavior: 'smooth' })" 
-                            :disabled="atStart" 
-                            :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'"
-                            class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">
-                        ←
-                    </button>
-                    <button @click="$refs.destSlider.scrollBy({ left: 240, behavior: 'smooth' })" 
-                            :disabled="atEnd" 
-                            :class="atEnd ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'"
-                            class="w-9 h-9 rounded-full border border-slate-300 flex items-center justify-center text-slate-600 hover:bg-brand hover:border-brand hover:text-white transition">
-                        →
-                    </button>
                 </div>
-            </div>
 
             <div class="relative -mx-4 md:mx-0">
+                <button @click="$refs.destSlider.scrollBy({ left: -280, behavior: 'smooth' })" :disabled="atStart" :class="atStart ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 -ml-5 w-12 h-12 rounded-full items-center justify-center transition-all duration-300 bg-white/80 backdrop-blur-md border border-white/50 shadow-xl text-slate-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                
+                <button @click="$refs.destSlider.scrollBy({ left: 280, behavior: 'smooth' })" :disabled="atEnd" :class="atEnd ? 'opacity-0 pointer-events-none' : 'opacity-100 hover:scale-110 hover:bg-white'" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 -mr-5 w-12 h-12 rounded-full items-center justify-center transition-all duration-300 bg-white/80 backdrop-blur-md border border-white/50 shadow-xl text-slate-800"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
+
                 <div x-ref="destSlider" 
                      @scroll.debounce.10ms="updateScroll()" 
-                     class="flex gap-4 md:gap-6 overflow-x-auto md:overflow-hidden pb-4 pt-1 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
+                     class="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
                     
                     <?php
-                    // 1. Get Destination Terms
                     $dest_args = array(
                         'taxonomy'   => 'destination',
-                        'hide_empty' => true, // Only show destinations that have trips
+                        'hide_empty' => true,
                         'number'     => 10
                     );
                     if (function_exists('pll_current_language')) {
@@ -307,34 +277,17 @@
 
                     if (!empty($destinations) && !is_wp_error($destinations)) :
                         foreach ($destinations as $term) :
-                            
-                            // FIX: Explicitly pass 'destination' so it works on Homepage
                             $img_url = nextur_get_term_image_url($term->term_id, 'destination');
-                            
                             $link = get_term_link($term);
                     ?>
-                        <a href="<?php echo esc_url($link); ?>" 
-                           class="relative flex-shrink-0 w-44 md:w-52 aspect-[3/4] snap-center md:snap-start rounded-xl overflow-hidden group bg-slate-200 shadow hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                            
-                            <img src="<?php echo esc_url($img_url); ?>" 
-                                 alt="<?php echo esc_attr($term->name); ?>" 
-                                 class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
-                            
+                        <a href="<?php echo esc_url($link); ?>" class="flex-shrink-0 w-[60vw] md:w-64 aspect-[3/4] snap-center md:snap-start relative overflow-hidden rounded-xl bg-slate-200 group block shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 z-10">
+                            <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($term->name); ?>" class="h-full w-full object-cover transition duration-700 group-hover:scale-110">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition"></div>
-                            
-                            <div class="absolute bottom-0 left-0 p-4 w-full"> 
-                                <h3 class="text-lg font-bold text-white font-heading tracking-wide leading-tight">
-                                    <?php echo esc_html($term->name); ?>
-                                </h3>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-[10px] font-medium text-white/80 bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                                        <?php echo $term->count; ?> <?php pll_e('Paket'); ?>
-                                    </span>
-                                    <div class="h-0.5 w-0 bg-brand transition-all duration-300 group-hover:w-6"></div>
-                                </div>
+                            <div class="absolute bottom-0 left-0 p-5 w-full">
+                                <h3 class="text-lg font-bold text-white font-heading tracking-wide mb-1"><?php echo esc_html($term->name); ?></h3>
+                                <div class="h-0.5 w-8 bg-brand transition-all duration-300 group-hover:w-16"></div>
                             </div>
                         </a>
-
                     <?php 
                         endforeach; 
                     else :
@@ -351,7 +304,6 @@
 
     <section class="py-12 bg-slate-50 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
             <div class="flex justify-between items-end mb-6">
                 <div class="w-full md:w-auto">
                     <h2 class="text-2xl md:text-3xl font-bold text-slate-900 font-heading mb-1"><?php pll_e('Jelajahi Indonesia'); ?></h2>
@@ -429,7 +381,6 @@
 
     <section class="py-20 bg-slate-50 border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
             <div class="flex flex-col md:flex-row justify-between items-end mb-12">
                 <div class="text-center md:text-left mb-6 md:mb-0">
                     <h2 class="text-3xl md:text-4xl font-bold text-slate-900 font-heading"><?php pll_e('Artikel & Inspirasi'); ?></h2>
@@ -440,16 +391,9 @@
                     <span class="transform group-hover:translate-x-1 transition">→</span> 
                 </a>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <?php
-                // Query 3 Latest Posts
-                $journal_query = new WP_Query(array(
-                    'post_type'      => 'post',
-                    'posts_per_page' => 3,
-                    'ignore_sticky_posts' => 1
-                ));
-
+                $journal_query = new WP_Query(array('post_type' => 'post', 'posts_per_page' => 3, 'ignore_sticky_posts' => 1));
                 if ($journal_query->have_posts()) :
                     while ($journal_query->have_posts()) : $journal_query->the_post();
                         $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : 'https://via.placeholder.com/600x400?text=Nextur+Journal';
@@ -457,25 +401,19 @@
                         $cat_name = !empty($cats) ? $cats[0]->name : 'Travel';
                 ?>
                     <article class="group flex flex-col h-full bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100">
-                        
                         <a href="<?php the_permalink(); ?>" class="relative h-56 overflow-hidden block">
-                            <img src="<?php echo esc_url($img_url); ?>" 
-                                 alt="<?php the_title(); ?>" 
-                                 class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"> 
+                            <img src="<?php echo esc_url($img_url); ?>" alt="<?php the_title(); ?>" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700"> 
                             <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
                         </a>
-
                         <div class="p-6 flex flex-col flex-grow">
                             <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
                                 <span class="text-brand"><?php echo esc_html($cat_name); ?></span>
                                 <span>•</span>
                                 <span><?php echo get_the_date('M d, Y'); ?></span> 
                             </div>
-
                             <h3 class="text-xl font-bold text-slate-900 font-heading mb-3 leading-snug line-clamp-2 group-hover:text-brand transition">
                                 <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                             </h3>
-
                             <div class="mt-auto pt-4">
                                 <a href="<?php the_permalink(); ?>" class="inline-flex items-center text-sm font-bold text-slate-600 group-hover:text-brand transition">
                                     <?php pll_e('Baca Selengkapnya'); ?> <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -483,18 +421,12 @@
                             </div>
                         </div>
                     </article>
-
-                <?php 
-                    endwhile; 
-                    wp_reset_postdata();
-                else :
-                ?>
+                <?php endwhile; wp_reset_postdata(); else : ?>
                     <div class="col-span-3 text-center py-12 bg-white rounded-xl border border-dashed border-slate-200"> 
                         <p class="text-slate-400"><?php pll_e('Belum ada artikel terbaru.'); ?></p>
                     </div>
                 <?php endif; ?>
             </div>
-
         </div>
     </section>
 </main>

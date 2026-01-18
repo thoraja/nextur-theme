@@ -67,29 +67,28 @@ function nextur_init_structure() {
     register_post_type('trip', array(
         'labels' => array('name' => 'Trips', 'singular_name' => 'Trip'),
         'public' => true,
-        'has_archive' => true,
+        'has_archive' => 'trips', // <--- CHANGED from true to 'trips'
         'menu_icon' => 'dashicons-airplane',
         'supports' => array('title', 'thumbnail'),
-        'rewrite' => array('slug' => 'trip'),
+        'rewrite' => array('slug' => 'trip'), // Keeps single URL as /trip/bali...
     ));
     
     // 2. Taxonomy: Destinations (Updated Slug to Plural)
     register_taxonomy('destination', 'trip', array(
         'labels' => array('name' => 'Destinations', 'singular_name' => 'Destination'),
-        'hierarchical' => true, // Category-style (Parent/Child)
+        'hierarchical' => true,
         'public' => true,
         'show_admin_column' => true,
-        'rewrite' => array('slug' => 'destinations'), // Changed from 'destination'
+        'rewrite' => array('slug' => 'destinations'),
         'show_in_rest' => true,
     ));
 
-    // 3. NEW Taxonomy: Activities (Tags style)
     register_taxonomy('activity', 'trip', array(
         'labels' => array('name' => 'Activities', 'singular_name' => 'Activity'),
-        'hierarchical' => false, // Tag-style (No parents)
+        'hierarchical' => false,
         'public' => true,
         'show_admin_column' => true,
-        'rewrite' => array('slug' => 'tour-activity'), // Matches LuxExplorer style
+        'rewrite' => array('slug' => 'tour-activity'),
         'show_in_rest' => true,
     ));
 }
@@ -268,19 +267,35 @@ function render_trip_gallery_box($post) {
     <?php
 }
 
-/* --- SAVE LOGIC --- */
+/* --- SAVE LOGIC (FIXED) --- */
 function save_trip_meta($post_id) {
     if (!isset($_POST['trip_nonce']) || !wp_verify_nonce($_POST['trip_nonce'], 'save_trip_meta')) return;
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
-    // UPDATED: Added '_trip_gallery' to the fields array
-    $fields = ['_trip_tag_year', '_trip_airline', '_trip_route', '_trip_price', '_trip_subtitle', '_trip_highlights', '_trip_min_pax', '_trip_deposit', '_trip_infant_price', '_trip_visa_note', '_trip_payment_terms', '_trip_is_featured', '_trip_gallery'];
-    foreach($fields as $f) { if(isset($_POST[$f])) update_post_meta($post_id, $f, sanitize_text_field($_POST[$f])); }
+    // 1. Handle Checkbox Explicitly (The Fix)
+    // If the box is checked, $_POST has '1'. If unchecked, it has nothing.
+    // We must force '0' if it is missing.
+    $featured = isset($_POST['_trip_is_featured']) ? '1' : '0';
+    update_post_meta($post_id, '_trip_is_featured', $featured);
 
+    // 2. Handle Text Fields (Removed _trip_is_featured from this list)
+    $fields = ['_trip_tag_year', '_trip_airline', '_trip_route', '_trip_price', '_trip_subtitle', '_trip_highlights', '_trip_min_pax', '_trip_deposit', '_trip_infant_price', '_trip_visa_note', '_trip_payment_terms', '_trip_gallery'];
+    foreach($fields as $f) { 
+        if(isset($_POST[$f])) {
+            update_post_meta($post_id, $f, sanitize_text_field($_POST[$f])); 
+        }
+    }
+
+    // 3. Handle Rich Text Areas
     $rich = ['_trip_includes', '_trip_excludes', '_trip_optional', '_trip_terms'];
-    foreach($rich as $r) { if(isset($_POST[$r])) update_post_meta($post_id, $r, wp_kses_post($_POST[$r])); }
+    foreach($rich as $r) { 
+        if(isset($_POST[$r])) {
+            update_post_meta($post_id, $r, wp_kses_post($_POST[$r])); 
+        }
+    }
 
+    // 4. Handle Itinerary (Array)
     if(isset($_POST['itinerary']) && is_array($_POST['itinerary'])) {
         $clean = [];
         foreach($_POST['itinerary'] as $day) {
@@ -367,23 +382,31 @@ add_filter('manage_gallery_item_posts_columns', 'nextur_gallery_columns');
 add_action('manage_gallery_item_posts_custom_column', 'nextur_gallery_custom_column', 10, 2);
 
 /* -------------------------------------------------------------------------- */
-/* HELPER: SMART TERM IMAGE (The "Fallback" Logic)                            */
+/* HELPER: SMART TERM IMAGE (Manual Upload > Latest Trip > Fallback)          */
 /* -------------------------------------------------------------------------- */
 function nextur_get_term_image_url($term_id = null, $taxonomy = 'destination') {
-    // 1. If we are on an archive page and no ID is provided, auto-detect
+    // 1. Auto-detect ID if on an archive page
     if (!$term_id && is_tax()) {
         $obj = get_queried_object();
         $term_id = $obj->term_id;
         $taxonomy = $obj->taxonomy;
     }
 
-    // 2. Query the latest trip in this specific Term & Taxonomy
+    // 2. CHECK MANUAL UPLOAD FIRST (New Logic)
+    // We check if you uploaded a specific image for this Activity/Destination in Admin
+    $manual_img_id = get_term_meta($term_id, 'activity_image_id', true);
+    if ($manual_img_id) {
+        $img_src = wp_get_attachment_image_url($manual_img_id, 'large');
+        if ($img_src) return $img_src;
+    }
+
+    // 3. Fallback: Query the latest trip in this term
     $args = array(
         'post_type'      => 'trip',
         'posts_per_page' => 1,
         'tax_query'      => array(
             array(
-                'taxonomy' => $taxonomy, // Now uses the passed argument (e.g., 'destination' or 'activity')
+                'taxonomy' => $taxonomy,
                 'field'    => 'term_id',
                 'terms'    => $term_id,
             ),
@@ -394,13 +417,12 @@ function nextur_get_term_image_url($term_id = null, $taxonomy = 'destination') {
     
     if ($latest_trip->have_posts()) {
         $latest_trip->the_post();
-        $img_url = get_the_post_thumbnail_url(get_the_ID(), 'large'); // Changed to 'large' for better performance
+        $img_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
         wp_reset_postdata();
-        
         if ($img_url) return $img_url;
     }
 
-    // 3. Fallback
+    // 4. Final Fallback (Placeholder)
     return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80'; 
 }
 
@@ -765,3 +787,92 @@ function nextur_handle_booking() {
 }
 add_action('admin_post_submit_booking', 'nextur_handle_booking');
 add_action('admin_post_nopriv_submit_booking', 'nextur_handle_booking');
+
+/* -------------------------------------------------------------------------- */
+/* PHASE 2 ADD-ON: ACTIVITY TAXONOMY IMAGE UPLOADER                           */
+/* -------------------------------------------------------------------------- */
+
+// 1. Add Field to "Add New Activity" Screen
+function nextur_activity_add_image_field() {
+    ?>
+    <div class="form-field term-group">
+        <label><?php _e('Activity Image (For Homepage)', 'nextur'); ?></label>
+        <input type="hidden" id="activity-image-id" name="activity_image_id" value="">
+        <div id="activity-image-wrapper" style="margin-bottom:10px;"></div>
+        <p>
+            <input type="button" class="button button-secondary nextur_media_button" value="<?php _e( 'Select Image', 'nextur' ); ?>" />
+            <input type="button" class="button button-secondary nextur_media_remove" value="<?php _e( 'Remove', 'nextur' ); ?>" style="display:none;" />
+        </p>
+    </div>
+    <?php
+}
+add_action('activity_add_form_fields', 'nextur_activity_add_image_field', 10, 2);
+
+// 2. Add Field to "Edit Activity" Screen
+function nextur_activity_edit_image_field($term, $taxonomy) {
+    $image_id = get_term_meta($term->term_id, 'activity_image_id', true);
+    ?>
+    <tr class="form-field term-group-wrap">
+        <th scope="row"><label><?php _e( 'Activity Image', 'nextur' ); ?></label></th>
+        <td>
+            <input type="hidden" id="activity-image-id" name="activity_image_id" value="<?php echo esc_attr($image_id); ?>">
+            <div id="activity-image-wrapper" style="margin-bottom:10px;">
+                <?php if ( $image_id ) { echo wp_get_attachment_image ( $image_id, 'thumbnail' ); } ?>
+            </div>
+            <p>
+                <input type="button" class="button button-secondary nextur_media_button" value="<?php _e( 'Select Image', 'nextur' ); ?>" />
+                <input type="button" class="button button-secondary nextur_media_remove" value="<?php _e( 'Remove', 'nextur' ); ?>" style="<?php echo $image_id ? '' : 'display:none;'; ?>" />
+            </p>
+        </td>
+    </tr>
+    <?php
+}
+add_action('activity_edit_form_fields', 'nextur_activity_edit_image_field', 10, 2);
+
+// 3. Save the Image Data
+function nextur_save_activity_image($term_id) {
+    if (isset($_POST['activity_image_id']) && '' !== $_POST['activity_image_id']){
+        update_term_meta($term_id, 'activity_image_id', absint($_POST['activity_image_id']));
+    } else {
+        update_term_meta($term_id, 'activity_image_id', ''); // Delete if empty
+    }
+}
+add_action('created_activity', 'nextur_save_activity_image', 10, 2);
+add_action('edited_activity', 'nextur_save_activity_image', 10, 2);
+
+// 4. Javascript for the Media Uploader (Admin Only)
+function nextur_activity_admin_script() {
+    $screen = get_current_screen();
+    if ( $screen->taxonomy == 'activity' ) {
+        ?>
+        <script>
+            jQuery(document).ready(function($) {
+                var frame;
+                $('.nextur_media_button').click(function(e) {
+                    e.preventDefault();
+                    if ( frame ) { frame.open(); return; }
+                    frame = wp.media({
+                        title: 'Select Activity Image',
+                        button: { text: 'Use this image' },
+                        multiple: false
+                    });
+                    frame.on('select', function() {
+                        var attachment = frame.state().get('selection').first().toJSON();
+                        $('#activity-image-id').val(attachment.id);
+                        $('#activity-image-wrapper').html('<img src="' + attachment.sizes.thumbnail.url + '" style="max-width:150px; border-radius:4px; border:1px solid #ddd;"/>');
+                        $('.nextur_media_remove').show();
+                    });
+                    frame.open();
+                });
+                $('.nextur_media_remove').click(function(e) {
+                    e.preventDefault();
+                    $('#activity-image-id').val('');
+                    $('#activity-image-wrapper').html('');
+                    $(this).hide();
+                });
+            });
+        </script>
+        <?php
+    }
+}
+add_action('admin_footer', 'nextur_activity_admin_script');

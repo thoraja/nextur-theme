@@ -358,12 +358,19 @@ $financials = [
 document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('waButtonSide');
     const title = "<?php echo esc_js(get_the_title()); ?>";
-    const phone = "6281234567890"; // Replace with real admin number
     
+    // 1. Fetch the Display Phone Number from Polylang (Same as Footer)
+    // This grabs the value you set for 'Company Phone' in Polylang
+    const rawPhone = "<?php echo function_exists('pll__') ? esc_js(pll__('+62 812 3456 7890')) : '+62 812 3456 7890'; ?>";
+    
+    // 2. Clean the number for URL (Remove +, spaces, dashes)
+    // Example: "+62 812-3456" becomes "628123456"
+    const cleanPhone = rawPhone.replace(/\D/g, ''); 
+
     if(btn) {
         btn.addEventListener('click', function() {
             const message = `Halo Nextur, saya tertarik dengan trip: ${title}. Mohon info availability.`;
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         });
     }

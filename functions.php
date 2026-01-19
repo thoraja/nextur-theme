@@ -876,3 +876,22 @@ function nextur_activity_admin_script() {
     }
 }
 add_action('admin_footer', 'nextur_activity_admin_script');
+
+/* -------------------------------------------------------------------------- */
+/* PHASE 4: SECURITY HARDENING                                                */
+/* -------------------------------------------------------------------------- */
+// 1. Hide WordPress Version (Prevents scanners from knowing your vulnerability level)
+remove_action('wp_head', 'wp_generator');
+
+// 2. Disable XML-RPC (Stops automated brute-force attacks)
+add_filter('xmlrpc_enabled', '__return_false');
+
+// 3. Block User Enumeration (Prevents bots from fishing for usernames)
+if (!is_admin()) {
+    if (preg_match('/author=([0-9]*)/i', $_SERVER['QUERY_STRING'])) die('Access Denied');
+    add_filter('redirect_canonical', 'nextur_block_enum', 10, 2);
+}
+function nextur_block_enum($redirect, $request) {
+    if (preg_match('/\?author=([0-9]*)(\/*)/i', $request)) die('Access Denied');
+    return $redirect;
+}

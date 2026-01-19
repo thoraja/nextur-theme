@@ -44,7 +44,7 @@
                     </li>
                     <li class="flex items-center">
                         <span class="mr-3 text-blue-500">📱</span>
-                        <span><?php pll_e('+62 812 9988 7766'); ?></span>
+                        <span><?php pll_e('+62 812 3456 7890'); ?></span>
                     </li>
                 </ul>
             </div>

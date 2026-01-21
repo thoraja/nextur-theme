@@ -15,10 +15,9 @@ get_header();
         </div>
     </section>
 
-    <section class="py-24 bg-white">
+    <section class="py-12 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-16 items-start">
-                
                 <div>
                     <h2 class="text-3xl font-bold text-slate-900 mb-8 font-heading"><?php pll_e('Visi & Filosofi'); ?></h2>
                     <div class="prose text-lg text-slate-600 font-sans leading-relaxed space-y-6">
@@ -62,7 +61,37 @@ get_header();
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
+    <section class="pb-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 font-heading">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <?php
+                $team_query = new WP_Query(array(
+                    'post_type' => 'team_member',
+                    'posts_per_page' => -1,
+                    'orderby' => 'menu_order',
+                    'order' => 'ASC'
+                ));
+
+                if ($team_query->have_posts()) :
+                    while ($team_query->have_posts()) : $team_query->the_post();
+                        $role = get_post_meta(get_the_ID(), '_team_role', true);
+                        $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : 'https://via.placeholder.com/400x500?text=No+Image';
+                ?>
+                <div class="group text-center">
+                    <div class="overflow-hidden rounded-2xl mb-6 shadow-lg">
+                        <img src="<?php echo esc_url($img_url); ?>" 
+                             class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" alt="<?php the_title(); ?>">
+                    </div>
+                    <h3 class="text-xl font-bold font-heading"><?php the_title(); ?></h3>
+                    <p class="text-brand font-medium text-sm"><?php echo esc_html($role); ?></p>
+                </div>
+                <?php endwhile; wp_reset_postdata(); endif; ?>
             </div>
         </div>
     </section>

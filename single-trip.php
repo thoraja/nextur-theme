@@ -65,7 +65,7 @@ $financials = [
             </h1>
             
             <?php if($header['sub']): ?>
-                <p class="text-lg md:text-2xl text-slate-300 font-serif italic mb-6 drop-shadow-sm">
+                <p class="text-lg md:text-2xl text-slate-300 font-serif italic mb-4 drop-shadow-sm">
                     <?php echo esc_html($header['sub']); ?>
                 </p>
             <?php endif; ?>
@@ -211,7 +211,7 @@ $financials = [
                         </div>
 
                         <div x-show="tab === 'financials'" style="display:none" x-transition.opacity>
-                            <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
                                 <?php if($financials['deposit']): ?>
                                 <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
                                     <span class="text-xs text-blue-600 font-bold uppercase">Deposit</span>
@@ -233,7 +233,7 @@ $financials = [
                             </div>
 
                             <?php if($financials['visa']): ?>
-                            <div class="bg-amber-50 p-4 rounded-xl border border-amber-100 mb-6">
+                            <div class="bg-amber-50 p-4 rounded-xl border border-amber-100 mb-4">
                                 <h4 class="text-sm font-bold text-amber-800 mb-1">Visa Note</h4>
                                 <p class="text-sm text-amber-900"><?php echo esc_html($financials['visa']); ?></p>
                             </div>
@@ -303,18 +303,20 @@ $financials = [
             </div>
 
             <div class="lg:col-span-1 order-2 relative z-30 h-full">
-                <div class="sticky top-28 space-y-4">
+                <div class="sticky top-24 space-y-4">
                     
-                    <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
-                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand rounded-full blur-3xl opacity-20"></div>
+                    <div class="relative rounded-2xl shadow-xl">
+                        <div class="absolute inset-0 bg-slate-900 rounded-2xl overflow-hidden z-0">
+                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand rounded-full blur-3xl opacity-20"></div>
+                        </div>
 
-                        <div class="relative z-10">
+                        <div class="relative z-10 p-6 text-white">
                             <p class="text-slate-400 text-xs font-bold uppercase mb-1">Start From</p>
-                            <p class="text-4xl font-bold font-heading text-white mb-6">
+                            <p class="text-3xl font-bold font-heading text-white mb-4">
                                 <?php echo $header['price'] ? 'Rp ' . number_format($header['price'], 0, ',', '.') : 'Hubungi Kami'; ?>
                             </p>
                             
-                            <div class="space-y-2 mb-6 text-sm text-slate-300">
+                            <div class="space-y-2 mb-4 text-sm text-slate-300">
                                 <?php if($financials['deposit']): ?>
                                 <div class="flex justify-between border-b border-white/10 pb-2">
                                     <span>Deposit</span>
@@ -324,7 +326,7 @@ $financials = [
                             </div>
                             
                             <div x-data="{ mode: 'form' }">
-                                <div class="grid grid-cols-2 gap-2 p-1 bg-slate-800 rounded-lg mb-6">
+                                <div class="grid grid-cols-2 gap-2 p-1 bg-slate-800 rounded-lg mb-4">
                                     <button type="button" @click="mode = 'form'" :class="mode === 'form' ? 'bg-slate-600 text-white shadow-md' : 'text-slate-400 hover:text-white'" class="py-2 text-sm font-bold rounded-md transition duration-200">Email</button>
                                     <button type="button" @click="mode = 'wa'" :class="mode === 'wa' ? 'bg-green-600 text-white shadow-md' : 'text-slate-400 hover:text-white'" class="py-2 text-sm font-bold rounded-md transition duration-200">WhatsApp</button>
                                 </div>
@@ -340,10 +342,10 @@ $financials = [
                                     </button>
                                 </div>
                             </div>
-                        </div>
                         
-                        <div class="mt-4 text-center text-xs text-slate-500">
-                            Licensed PT • Trusted • Quality
+                            <div class="mt-4 text-center text-xs text-slate-500">
+                                Licensed PT • Trusted • Quality
+                            </div>
                         </div>
                     </div>
 

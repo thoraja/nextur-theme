@@ -539,7 +539,8 @@ function nextur_register_strings() {
         pll_register_string('Nextur About', 'Kolaborasi sebagai perjalanan bersama. Pertumbuhan klien adalah keberhasilan kami.', 'Page: About', true);
         pll_register_string('Nextur About', 'Sustainable Impact', 'Page: About');
         pll_register_string('Nextur About', 'Memprioritaskan keberlanjutan untuk manfaat masa depan.', 'Page: About', true);
-
+        pll_register_string('Nextur About', 'Tim Kami', 'Page: About');
+        pll_register_string('Nextur About', 'Orang-orang di balik perjalanan seru Anda.', 'Page: About');
         // --- GROUP 8: PAGE - SERVICES (Merged & Cleaned) ---
         // Filter by 'Page: Services'
         pll_register_string('Nextur Services', 'Layanan Kami', 'Page: Services');
@@ -622,6 +623,41 @@ add_action('after_setup_theme', 'nextur_register_menus');
 /* PHASE 6: FORM HANDLERS (Contact & Booking)                                 */
 /* -------------------------------------------------------------------------- */
 
+// 0. REGISTER CUSTOMIZER SETTINGS (Email Targets)
+function nextur_customize_register($wp_customize) {
+    // Section: Company Settings
+    $wp_customize->add_section('nextur_company_settings', array(
+        'title'    => __('Company Settings', 'nextur'),
+        'priority' => 30,
+    ));
+
+    // Setting: Primary Email
+    $wp_customize->add_setting('company_email', array(
+        'default'   => get_option('admin_email'),
+        'transport' => 'refresh',
+        'sanitize_callback' => 'sanitize_email'
+    ));
+    $wp_customize->add_control('company_email', array(
+        'label'    => __('Primary Notification Email', 'nextur'),
+        'section'  => 'nextur_company_settings',
+        'type'     => 'email',
+    ));
+
+    // Setting: Secondary Email
+    $wp_customize->add_setting('company_secondary_email', array(
+        'default'   => '',
+        'transport' => 'refresh',
+        'sanitize_callback' => 'sanitize_email'
+    ));
+    $wp_customize->add_control('company_secondary_email', array(
+        'label'    => __('Secondary Notification Email (CC)', 'nextur'),
+        'section'  => 'nextur_company_settings',
+        'type'     => 'email',
+        'description' => __('Optional. Add a second email to receive form submissions.', 'nextur'),
+    ));
+}
+add_action('customize_register', 'nextur_customize_register');
+
 // Helper: Get the Target Email
 function nextur_get_target_email() {
     // Try to get the email from the Customizer setting we made earlier
@@ -634,8 +670,7 @@ function nextur_get_target_email() {
     return $target;
 }
 
-// 1. HANDLE CONTACT FORM
-// 1. HANDLE CONTACT FORM (Styled Email)
+// 1. HANDLE CONTACT FORM (Styled Email + Multiple Recipients)
 function nextur_handle_contact() {
     // Security Check (Optional)
     // if (!isset($_POST['contact_nonce']) || !wp_verify_nonce($_POST['contact_nonce'], 'submit_contact')) wp_die('Security check failed');
@@ -644,7 +679,17 @@ function nextur_handle_contact() {
     $email = sanitize_email($_POST['contact_email']);
     $message_content = sanitize_textarea_field($_POST['contact_message']);
 
-    $to = nextur_get_target_email(); // Sends to info@nextur.id (or customizer setting)
+    // --- DOUBLE EMAIL CONFIGURATION ---
+    $primary_email = nextur_get_target_email(); // From Customizer/Settings
+    $secondary_email = get_theme_mod('company_secondary_email'); // Retrieved from Customizer
+    
+    // Combine them into an array
+    $to = array($primary_email);
+    if (!empty($secondary_email)) {
+        $to[] = $secondary_email;
+    }
+    // ----------------------------------
+
     $subject = "New Inquiry from: $name";
     
     // Required headers for HTML email
@@ -661,14 +706,11 @@ function nextur_handle_contact() {
     <body style="margin: 0; padding: 0; font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif; background-color: #f3f4f6;">
         <div style="padding: 40px 0;">
             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                
                 <div style="background-color: #0f172a; padding: 30px; text-align: center;">
                     <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 0.5px;">New Message</h1>
                     <p style="color: #94a3b8; margin: 5px 0 0 0; font-size: 14px;">Nextur Website Inquiry</p>
                 </div>
-
                 <div style="padding: 32px; color: #334155;">
-                    
                     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px;">
                         <tr>
                             <td width="50%" style="vertical-align: top; padding-right: 10px;">
@@ -683,16 +725,13 @@ function nextur_handle_contact() {
                             </td>
                         </tr>
                     </table>
-
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 24px;">
                         <p style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: bold; margin: 0 0 12px 0; letter-spacing: 1px;">Message Content</p>
                         <div style="background-color: #f8fafc; border-left: 4px solid #0284c7; padding: 20px; border-radius: 4px; color: #334155; line-height: 1.6;">
                             ' . nl2br($message_content) . '
                         </div>
                     </div>
-
                 </div>
-
                 <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
                     <p style="font-size: 12px; color: #94a3b8; margin: 0;">
                         &copy; ' . date("Y") . ' Nextur. All rights reserved.<br>
@@ -714,7 +753,7 @@ function nextur_handle_contact() {
 add_action('admin_post_submit_contact', 'nextur_handle_contact'); // For logged in users
 add_action('admin_post_nopriv_submit_contact', 'nextur_handle_contact'); // For guests
 
-// 2. HANDLE BOOKING FORM (Updated)
+// 2. HANDLE BOOKING FORM (Updated + Multiple Recipients)
 function nextur_handle_booking() {
     $name = sanitize_text_field($_POST['fullname']);
     $email = sanitize_email($_POST['email']);
@@ -724,7 +763,17 @@ function nextur_handle_booking() {
     $trip = sanitize_text_field($_POST['trip_name']);
     $notes = sanitize_textarea_field($_POST['notes']);
 
-    $to = nextur_get_target_email(); // Sends to info@nextur.id
+    // --- DOUBLE EMAIL CONFIGURATION ---
+    $primary_email = nextur_get_target_email(); // From Customizer/Settings
+    $secondary_email = get_theme_mod('company_secondary_email'); // Retrieved from Customizer
+    
+    // Combine them into an array
+    $to = array($primary_email);
+    if (!empty($secondary_email)) {
+        $to[] = $secondary_email;
+    }
+    // ----------------------------------
+
     $subject = "New Booking Request: $trip";
     $headers = array('Content-Type: text/html; charset=UTF-8', "Reply-To: $name <$email>");
     
@@ -782,7 +831,7 @@ function nextur_handle_booking() {
     wp_mail($to, $subject, $message, $headers);
     
     // Redirect to Thank You Page
-    wp_redirect(home_url('/thank-you')); // Ensure you have a page with slug 'thank-you'
+    wp_redirect(home_url('/thank-you'));
     exit;
 }
 add_action('admin_post_submit_booking', 'nextur_handle_booking');
@@ -895,3 +944,48 @@ function nextur_block_enum($redirect, $request) {
     if (preg_match('/\?author=([0-9]*)(\/*)/i', $request)) die('Access Denied');
     return $redirect;
 }
+
+/* -------------------------------------------------------------------------- */
+/* PHASE 2 ADD-ON: TEAM MEMBERS (Dynamic Team Section)                        */
+/* -------------------------------------------------------------------------- */
+
+// 1. Register CPT
+function nextur_register_team_cpt() {
+    register_post_type('team_member', array(
+        'labels' => array(
+            'name' => 'Team Members',
+            'singular_name' => 'Team Member',
+            'add_new_item' => 'Add New Team Member',
+            'edit_item' => 'Edit Team Member'
+        ),
+        'public' => true,
+        'exclude_from_search' => true,
+        'publicly_queryable'  => false,
+        'show_ui' => true,
+        'menu_icon' => 'dashicons-groups',
+        'supports' => array('title', 'thumbnail', 'page-attributes'), // Title = Name, Thumbnail = Photo, Page Attributes = Order
+        'menu_position' => 21,
+    ));
+}
+add_action('init', 'nextur_register_team_cpt');
+
+// 2. Add Role Meta Box
+function nextur_add_team_meta() {
+    add_meta_box('team_role_box', 'Team Member Details', 'nextur_render_team_meta', 'team_member', 'normal', 'high');
+}
+function nextur_render_team_meta($post) {
+    $role = get_post_meta($post->ID, '_team_role', true);
+    ?>
+    <p>
+        <label style="font-weight:bold; display:block; margin-bottom:5px;">Job Title / Role</label>
+        <input type="text" name="_team_role" value="<?php echo esc_attr($role); ?>" class="widefat" placeholder="e.g. Founder & CEO">
+    </p>
+    <?php
+}
+function nextur_save_team_meta($post_id) {
+    if (isset($_POST['_team_role'])) {
+        update_post_meta($post_id, '_team_role', sanitize_text_field($_POST['_team_role']));
+    }
+}
+add_action('add_meta_boxes', 'nextur_add_team_meta');
+add_action('save_post', 'nextur_save_team_meta');

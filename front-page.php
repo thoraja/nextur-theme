@@ -3,13 +3,7 @@
 <main>
     <?php
     // 1. Fetch Featured Trips
-    $hero_args = array(
-        'post_type'      => 'trip',
-        'posts_per_page' => 5,
-        'meta_key'       => '_trip_is_featured',
-        'meta_value'     => '1'
-    );
-    $hero_query = new WP_Query($hero_args);
+    $hero_query = nextur_get_featured_trips();
     $slides_data = [];
 
     if ($hero_query->have_posts()) {
@@ -143,12 +137,10 @@
 
                 <div x-ref="tripSlider" @scroll.debounce.10ms="updateScroll()" class="flex gap-4 md:gap-8 overflow-x-auto pb-12 pt-4 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
                     <?php
-                    $args = array('post_type' => 'trip', 'posts_per_page' => 12, 'orderby' => 'date', 'order' => 'DESC');
-                    $trips = new WP_Query($args);
+                    $trips = nextur_get_all_trips();
                     if ($trips->have_posts()) : while ($trips->have_posts()) : $trips->the_post();
                         $id = get_the_ID();
-                        $price = get_post_meta($id, '_trip_price', true);
-                        $formatted_price = $price ? 'Rp ' . number_format($price, 0, ',', '.') : (function_exists('pll_e') ? pll__('Hubungi Kami') : __('Hubungi Kami', 'nextur'));
+                        $formatted_price = nextur_get_formatted_price($id);
                         $airline = get_post_meta($id, '_trip_airline', true);
                         $year_tag = get_post_meta($id, '_trip_tag_year', true);
                         $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url($id, 'large') : 'https://via.placeholder.com/600x400';
@@ -329,8 +321,7 @@
                 
                 <div x-ref="indoSlider" @scroll.debounce.10ms="updateScroll()" class="flex gap-4 md:gap-6 overflow-x-auto pb-8 pt-2 px-4 md:px-0 snap-x snap-mandatory no-scrollbar scroll-smooth">
                     <?php
-                    $args = array('post_type' => 'gallery_item', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC');
-                    $highlights = new WP_Query($args);
+                    $highlights = nextur_get_highlight_destinations();
                     if ($highlights->have_posts()) : while ($highlights->have_posts()) : $highlights->the_post();
                         $link = get_post_meta(get_the_ID(), '_gallery_link', true) ?: '#';
                         $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : 'https://via.placeholder.com/600x800?text=No+Image';
@@ -393,7 +384,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <?php
-                $journal_query = new WP_Query(array('post_type' => 'post', 'posts_per_page' => 3, 'ignore_sticky_posts' => 1));
+                $journal_query = nextur_get_journal_posts(3);
                 if ($journal_query->have_posts()) :
                     while ($journal_query->have_posts()) : $journal_query->the_post();
                         $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : 'https://via.placeholder.com/600x400?text=Nextur+Journal';

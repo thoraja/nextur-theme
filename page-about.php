@@ -84,9 +84,9 @@ get_header();
                         $img_url = has_post_thumbnail() ? get_the_post_thumbnail_url(get_the_ID(), 'large') : 'https://via.placeholder.com/400x500?text=No+Image';
                 ?>
                 <div class="group text-center">
-                    <div class="overflow-hidden rounded-2xl mb-6 shadow-lg">
+                    <div class="overflow-hidden rounded-2xl mb-6 shadow-lg aspect-[3/4]">
                         <img src="<?php echo esc_url($img_url); ?>" 
-                             class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" alt="<?php the_title(); ?>">
+                             class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" alt="<?php the_title(); ?>">
                     </div>
                     <h3 class="text-xl font-bold font-heading"><?php the_title(); ?></h3>
                     <p class="text-brand font-medium text-sm"><?php echo esc_html($role); ?></p>

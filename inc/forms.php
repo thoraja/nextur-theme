@@ -23,7 +23,8 @@ function nextur_customize_register($wp_customize) {
         'type'     => 'email',
     ));
 
-    // Setting: Secondary Email
+    /*
+    // Setting: Secondary Email (DEPRECATED - Moved to Company Info)
     $wp_customize->add_setting('company_secondary_email', array(
         'default'   => '',
         'transport' => 'refresh',
@@ -35,6 +36,7 @@ function nextur_customize_register($wp_customize) {
         'type'     => 'email',
         'description' => __('Optional. Add a second email to receive form submissions.', 'nextur'),
     ));
+    */
 }
 add_action('customize_register', 'nextur_customize_register');
 
@@ -50,7 +52,8 @@ function nextur_handle_contact() {
 
     // --- DOUBLE EMAIL CONFIGURATION ---
     $primary_email = nextur_get_target_email(); // From Helpers
-    $secondary_email = get_theme_mod('company_secondary_email'); // Retrieved from Customizer
+    $secondary_email = nextur_get_company_info('secondary_email'); // Retrieved from New Company Info Settings
+    
     
     // Combine them into an array
     $to = array($primary_email);
@@ -134,7 +137,7 @@ function nextur_handle_booking() {
 
     // --- DOUBLE EMAIL CONFIGURATION ---
     $primary_email = nextur_get_target_email(); // From Helpers
-    $secondary_email = get_theme_mod('company_secondary_email'); // Retrieved from Customizer
+    $secondary_email = nextur_get_company_info('secondary_email'); // Retrieved from New Company Info Settings
     
     // Combine them into an array
     $to = array($primary_email);

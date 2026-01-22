@@ -7,11 +7,11 @@ function nextur_register_strings() {
     if (function_exists('pll_register_string')) {
         
         // --- GROUP 1: GLOBAL COMPANY INFO (Editable Contact Details) ---
-        // Use group 'Company Info' to find these quickly
-        pll_register_string('Nextur Info', 'Jl. Sudirman Kav 12, Jakarta Selatan, 12190', 'Company Info', true); // Multiline address
-        pll_register_string('Nextur Info', '+62 812 3456 7890', 'Company Info'); // Phone Display
-        pll_register_string('Nextur Info', 'info@nextur.com', 'Company Info'); // Email
-        pll_register_string('Nextur Info', 'https://wa.me/6281234567890', 'Company Info'); // WhatsApp Link URL
+        // MOVED TO "COMPANY INFO" SETTINGS PAGE
+        // pll_register_string('Nextur Info', 'Jl. Sudirman Kav 12, Jakarta Selatan, 12190', 'Company Info', true); 
+        // pll_register_string('Nextur Info', '+62 812 3456 7890', 'Company Info'); 
+        // pll_register_string('Nextur Info', 'info@nextur.com', 'Company Info'); 
+        // pll_register_string('Nextur Info', 'https://wa.me/6281234567890', 'Company Info');
 
         // --- GROUP 2: NAVIGATION & MENUS ---
         pll_register_string('Nextur Nav', 'Beranda', 'Navigation');

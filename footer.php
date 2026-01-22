@@ -11,9 +11,15 @@
                     <?php pll_e('Partner perjalanan terbaik Anda. Kami berkomitmen memberikan pengalaman wisata yang tak terlupakan dengan standar keamanan dan kenyamanan tertinggi.'); ?>
                 </p>
                 <div class="flex space-x-4 pt-2">
-                    <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition"><span class="sr-only">IG</span>📸</a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition"><span class="sr-only">FB</span>fb</a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition"><span class="sr-only">TW</span>𝕏</a>
+                    <?php if($ig = nextur_get_company_info('instagram')): ?>
+                        <a href="<?php echo esc_url($ig); ?>" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition"><span class="sr-only">IG</span>📸</a>
+                    <?php endif; ?>
+                    <?php if($fb = nextur_get_company_info('facebook')): ?>
+                        <a href="<?php echo esc_url($fb); ?>" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition"><span class="sr-only">FB</span>fb</a>
+                    <?php endif; ?>
+                    <?php if($li = nextur_get_company_info('linkedin')): ?>
+                        <a href="<?php echo esc_url($li); ?>" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition"><span class="sr-only">LI</span>in</a>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -36,15 +42,15 @@
                 <ul class="space-y-4 text-sm">
                     <li class="flex items-start">
                         <span class="mr-3 text-blue-500">📍</span>
-                        <span><?php pll_e('Jl. Sudirman Kav 12, Jakarta Selatan, 12190'); ?></span>
+                        <span><?php echo nl2br(esc_html(nextur_get_company_info('address'))); ?></span>
                     </li>
                     <li class="flex items-center">
                         <span class="mr-3 text-blue-500">📧</span>
-                        <a href="mailto:info@nextur.com" class="hover:text-blue-400 transition"><?php pll_e('info@nextur.com'); ?></a>
+                        <a href="mailto:<?php echo esc_attr(nextur_get_company_info('email')); ?>" class="hover:text-blue-400 transition"><?php echo esc_html(nextur_get_company_info('email')); ?></a>
                     </li>
                     <li class="flex items-center">
                         <span class="mr-3 text-blue-500">📱</span>
-                        <span><?php pll_e('+62 812 3456 7890'); ?></span>
+                        <span><?php echo esc_html(nextur_get_company_info('phone')); ?></span>
                     </li>
                 </ul>
             </div>

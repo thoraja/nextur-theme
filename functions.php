@@ -15,6 +15,8 @@ $nextur_includes = array(
     'inc/polylang.php',   // Polylang String Config
     'inc/helpers.php',    // Helper Functions
     'inc/forms.php',      // Form Handling & Customizer
+    'inc/company-info.php', // Company Info Settings
+    'inc/documentation.php' // Theme Documentation & User Guide
 );
 
 foreach ($nextur_includes as $file) {

@@ -24,7 +24,7 @@ get_header();
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-bold font-heading"><?php pll_e('Kantor Pusat'); ?></h3>
-                                <p class="text-slate-300 text-sm mt-1"><?php pll_e('Jl. Sudirman Kav 12, Jakarta Selatan, 12190'); ?></p>
+                                <p class="text-slate-300 text-sm mt-1"><?php echo nl2br(esc_html(nextur_get_company_info('address'))); ?></p>
                             </div>
                         </div>
 
@@ -34,7 +34,7 @@ get_header();
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-bold font-heading"><?php pll_e('Telepon & WhatsApp'); ?></h3>
-                                <p class="text-slate-300 text-sm mt-1"><?php pll_e('+62 812 3456 7890'); ?></p>
+                                <p class="text-slate-300 text-sm mt-1"><?php echo esc_html(nextur_get_company_info('phone')); ?></p>
                             </div>
                         </div>
 
@@ -44,7 +44,7 @@ get_header();
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-bold font-heading"><?php pll_e('Email'); ?></h3>
-                                <p class="text-slate-300 text-sm mt-1"><?php pll_e('info@nextur.com'); ?></p>
+                                <p class="text-slate-300 text-sm mt-1"><?php echo esc_html(nextur_get_company_info('email')); ?></p>
                             </div>
                         </div>
                     </div>

@@ -68,7 +68,11 @@ get_header();
     <section class="pb-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-slate-900 font-heading">
+                <h2 class="text-3xl font-bold text-slate-900 font-heading"><?php pll_e('Tim Kami'); ?></h2>
+                <p class="text-slate-600 mt-4 max-w-2xl mx-auto">
+                    <?php pll_e('Kenali para profesional di balik setiap kesuksesan proyek dan inovasi kami.'); ?>
+                </p>
+            </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <?php
                 $team_query = new WP_Query(array(

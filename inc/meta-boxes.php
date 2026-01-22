@@ -12,6 +12,9 @@ function nextur_add_meta_boxes() {
     add_meta_box('trip_details_box', '5. Full Details', 'render_trip_details_box', 'trip', 'normal', 'high');
     // RESTORED: Gallery Box
     add_meta_box('trip_gallery_box', '6. Trip Gallery', 'render_trip_gallery_box', 'trip', 'normal', 'high');
+    
+    // RESTORED: Team Member Role
+    add_meta_box('team_role_box', 'Member Role', 'render_team_role_box', 'team_member', 'normal', 'high');
 }
 add_action('add_meta_boxes', 'nextur_add_meta_boxes');
 
@@ -244,3 +247,22 @@ function nextur_save_gallery_meta($post_id) {
 }
 add_action('add_meta_boxes', 'nextur_add_gallery_meta');
 add_action('save_post', 'nextur_save_gallery_meta');
+
+/* --- TEAM MEMBER META --- */
+
+function render_team_role_box($post) {
+    $role = get_post_meta($post->ID, '_team_role', true);
+    ?>
+    <p>
+        <label style="font-weight:bold; display:block; margin-bottom:5px;">Job Title / Role</label>
+        <input type="text" name="_team_role" value="<?php echo esc_attr($role); ?>" class="widefat" placeholder="e.g. CEO, Tour Guide, Marketing">
+    </p>
+    <?php
+}
+
+function nextur_save_team_meta($post_id) {
+    if (isset($_POST['_team_role'])) {
+        update_post_meta($post_id, '_team_role', sanitize_text_field($_POST['_team_role']));
+    }
+}
+add_action('save_post', 'nextur_save_team_meta');

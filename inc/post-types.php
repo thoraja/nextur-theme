@@ -58,6 +58,30 @@ function nextur_register_gallery_cpt() {
 }
 add_action('init', 'nextur_register_gallery_cpt');
 
+/* -------------------------------------------------------------------------- */
+/* PHASE 3 ADD-ON: TEAM MEMBERS                                               */
+/* -------------------------------------------------------------------------- */
+
+// 1. Register CPT: Team Member
+function nextur_register_team_cpt() {
+    register_post_type('team_member', array(
+        'labels' => array(
+            'name' => 'Team Members',
+            'singular_name' => 'Member',
+            'add_new_item' => 'Add New Member',
+            'edit_item' => 'Edit Member'
+        ),
+        'public' => true,
+        'exclude_from_search' => true,
+        'publicly_queryable' => false, // No single page needed
+        'show_ui' => true,
+        'show_in_menu' => true, // Explicitly show in menu
+        'menu_icon' => 'dashicons-groups',
+        'supports' => array('title', 'thumbnail', 'page-attributes'), // Title = Name, Thumbnail = Photo, Page Attributes = Order
+    ));
+}
+add_action('init', 'nextur_register_team_cpt');
+
 // 3. Admin Columns (Show Image in List)
 function nextur_gallery_columns($columns) {
     $new_columns = array(

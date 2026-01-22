@@ -70,7 +70,7 @@ get_header();
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-slate-900 font-heading"><?php pll_e('Tim Kami'); ?></h2>
                 <p class="text-slate-600 mt-4 max-w-2xl mx-auto">
-                    <?php pll_e('Kenali para profesional di balik setiap kesuksesan proyek dan inovasi kami.'); ?>
+                    <?php pll_e('Orang-orang di balik perjalanan seru Anda.'); ?>
                 </p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">

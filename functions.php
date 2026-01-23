@@ -16,7 +16,8 @@ $nextur_includes = array(
     'inc/helpers.php',    // Helper Functions
     'inc/forms.php',      // Form Handling & Customizer
     'inc/company-info.php', // Company Info Settings
-    'inc/documentation.php' // Theme Documentation & User Guide
+    'inc/documentation.php', // Theme Documentation & User Guide
+    'inc/theme-settings.php' // General Theme Settings
 );
 
 foreach ($nextur_includes as $file) {

@@ -104,6 +104,7 @@ function nextur_render_docs_page() {
                     <li><a href="#activities" class="nav-link" onclick="showSection('activities')"><span class="dashicons dashicons-palmtree"></span> <span class="txt-id">Gaya Liburan</span><span class="txt-en" style="display:none">Vacation Styles</span></a></li>
                     <li><a href="#highlights" class="nav-link" onclick="showSection('highlights')"><span class="dashicons dashicons-images-alt2"></span> <span class="txt-id">Indo Highlights</span><span class="txt-en" style="display:none">Indo Highlights</span></a></li>
                     <li><a href="#journal" class="nav-link" onclick="showSection('journal')"><span class="dashicons dashicons-welcome-write-blog"></span> <span class="txt-id">Artikel / Jurnal</span><span class="txt-en" style="display:none">Articles / Journal</span></a></li>
+                    <li><a href="#settings" class="nav-link" onclick="showSection('settings')"><span class="dashicons dashicons-admin-generic"></span> <span class="txt-id">Pengaturan Tema</span><span class="txt-en" style="display:none">Theme Settings</span></a></li>
                     <li><a href="#pages" class="nav-link" onclick="showSection('pages')"><span class="dashicons dashicons-admin-page"></span> <span class="txt-id">Halaman & Template</span><span class="txt-en" style="display:none">Pages & Templates</span></a></li>
                 </ul>
             </nav>
@@ -549,6 +550,52 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                     </div>
                 </div>
                 
+                <!-- SECTION: THEME SETTINGS -->
+                <div id="sec-settings" class="docs-section">
+                    <div class="lang-content-id">
+                        <h2>Pengaturan Tema (Theme Settings)</h2>
+                        <p>Pengaturan umum untuk fitur-fitur tema.</p>
+
+                        <div class="feature-box">
+                            <span class="feature-title">FITUR TERSEDIA:</span>
+                            <ul>
+                                <li><strong>Content Protection:</strong> Mencegah pengunjung untuk klik kanan, blok teks, copy-paste, dan drag gambar.</li>
+                            </ul>
+                        </div>
+                        
+                        <p><a href="<?php echo admin_url('admin.php?page=nextur-theme-settings'); ?>" class="button button-primary">Buka Pengaturan Tema &rarr;</a></p>
+
+                        <h3>Cara Mengaktifkan Proteksi</h3>
+                        <ol>
+                            <li>Buka menu <strong>Theme Settings</strong>.</li>
+                            <li>Centang <strong>"Enable Copy Protection"</strong>.</li>
+                            <li>Klik <strong>Save Settings</strong>.</li>
+                        </ol>
+                        <p>ℹ️ <em>Formulir kontak dan input field tetap bisa digunakan seperti biasa.</em></p>
+                    </div>
+                    <div class="lang-content-en" style="display:none">
+                        <h2>Theme Settings</h2>
+                        <p>General configuration for theme features.</p>
+
+                        <div class="feature-box">
+                            <span class="feature-title">AVAILABLE FEATURES:</span>
+                            <ul>
+                                <li><strong>Content Protection:</strong> Prevent users from right-clicking, selecting text, copy-pasting, and dragging images.</li>
+                            </ul>
+                        </div>
+                        
+                        <p><a href="<?php echo admin_url('admin.php?page=nextur-theme-settings'); ?>" class="button button-primary">Open Theme Settings &rarr;</a></p>
+
+                        <h3>How to Enable Protection</h3>
+                        <ol>
+                            <li>Go to <strong>Theme Settings</strong> menu.</li>
+                            <li>Check <strong>"Enable Copy Protection"</strong>.</li>
+                            <li>Click <strong>Save Settings</strong>.</li>
+                        </ol>
+                        <p>ℹ️ <em>Contact forms and input fields remain fully functional.</em></p>
+                    </div>
+                </div>
+
                 <!-- SECTION: PAGES -->
                 <div id="sec-pages" class="docs-section">
                     <div class="lang-content-id">

@@ -42,6 +42,7 @@ The theme includes a robust Custom Post Type called **Trips** (`trip`), featurin
 *   **JSON Trip Importer**: A specialized page template (`page-importer.php`) allowing bulk import of trips via JSON payload. It automatically handles bilingual linking (ID <-> EN) and taxonomy creation.
 *   **Interactive Documentation**: A dedicated "Theme Docs" page in the Admin Dashboard containing user guides and AI prompts for the importer.
 *   **Centralized Company Info**: A settings page to manage Addresses, Phone Numbers, and Social Media links globally.
+*   **Content Protection**: Optional "Copy Protection" mode to disable right-click, text selection, and drag-and-drop actions to protect site content. Managed via "Theme Settings".
 
 ## 📂 File Structure
 

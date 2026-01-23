@@ -31,6 +31,11 @@ function nextur_scripts() {
             }
         }
     ");
+    // 5. Content Protection (If Enabled)
+    if (get_option('nextur_enable_content_protection')) {
+        wp_enqueue_style('nextur-protection', get_template_directory_uri() . '/assets/css/content-protection.css', array(), '1.0');
+        wp_enqueue_script('nextur-protection', get_template_directory_uri() . '/assets/js/content-protection.js', array(), '1.0', true);
+    }
 }
 add_action('wp_enqueue_scripts', 'nextur_scripts');
 

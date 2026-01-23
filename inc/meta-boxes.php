@@ -112,7 +112,8 @@ function render_trip_financial_box($post) {
         <p><label><strong>Deposit Amount</strong></label><br><input type="text" name="_trip_deposit" value="<?php echo esc_attr($deposit); ?>" class="widefat"></p>
         <p><label><strong>Infant Price</strong></label><br><input type="text" name="_trip_infant_price" value="<?php echo esc_attr($infant); ?>" class="widefat"></p>
         <p><label><strong>Visa Note</strong></label><br><input type="text" name="_trip_visa_note" value="<?php echo esc_attr($visa); ?>" class="widefat"></p>
-    </div>
+        <?php $wa = get_post_meta($post->ID, '_trip_booking_whatsapp', true); ?>
+        <p><label><strong>Booking WhatsApp Number</strong></label><br><input type="text" name="_trip_booking_whatsapp" value="<?php echo esc_attr($wa); ?>" class="widefat" placeholder="e.g. 628123456789"></p>
     <p><label><strong>Payment Terms Note</strong></label><br><textarea name="_trip_payment_terms" rows="3" class="widefat"><?php echo esc_textarea($terms); ?></textarea></p>
     <?php
 }
@@ -192,7 +193,7 @@ function save_trip_meta($post_id) {
     update_post_meta($post_id, '_trip_is_featured', $featured);
 
     // 2. Handle Text Fields (Removed _trip_is_featured from this list)
-    $fields = ['_trip_tag_year', '_trip_airline', '_trip_route', '_trip_price', '_trip_subtitle', '_trip_highlights', '_trip_min_pax', '_trip_deposit', '_trip_infant_price', '_trip_visa_note', '_trip_payment_terms', '_trip_gallery'];
+    $fields = ['_trip_tag_year', '_trip_airline', '_trip_route', '_trip_price', '_trip_subtitle', '_trip_highlights', '_trip_min_pax', '_trip_deposit', '_trip_infant_price', '_trip_visa_note', '_trip_payment_terms', '_trip_gallery', '_trip_booking_whatsapp'];
     foreach($fields as $f) { 
         if(isset($_POST[$f])) {
             update_post_meta($post_id, $f, sanitize_text_field($_POST[$f])); 

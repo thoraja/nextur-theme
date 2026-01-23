@@ -361,9 +361,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('waButtonSide');
     const title = "<?php echo esc_js(get_the_title()); ?>";
     
-    // 1. Fetch the Display Phone Number from Polylang (Same as Footer)
-    // This grabs the value you set for 'Company Phone' in Polylang
-    const rawPhone = "<?php echo function_exists('pll__') ? esc_js(pll__('+62 812 3456 7890')) : '+62 812 3456 7890'; ?>";
+    // 1. Fetch the Display Phone Number 
+    // Priority: Per-Trip Override > Company Info Phone > Default
+    <?php 
+        $custom_wa = get_post_meta(get_the_ID(), '_trip_booking_whatsapp', true);
+        if($custom_wa) {
+             $final_phone = $custom_wa;
+        } else {
+             $final_phone = function_exists('nextur_get_company_info') ? nextur_get_company_info('phone') : '';
+             if(!$final_phone) $final_phone = '+62 812 3456 7890'; // Absolute fallback
+        }
+    ?>
+    const rawPhone = "<?php echo esc_js($final_phone); ?>";
     
     // 2. Clean the number for URL (Remove +, spaces, dashes)
     // Example: "+62 812-3456" becomes "628123456"

@@ -35,12 +35,13 @@ The theme includes a robust Custom Post Type called **Trips** (`trip`), featurin
 
 ### 3. Multilingual Support (Polylang)
 *   Deep integration with the **Polylang** plugin.
-*   **String Registration**: Custom strings (Company Info, UI labels, Form placeholders) are registered in `functions.php` for easy translation in WP Admin.
+*   **String Registration**: Custom strings (Company Info, UI labels, Form placeholders) are registered via `inc/polylang.php`.
 *   **Language Switcher**: Custom-styled dropdowns in both Desktop and Mobile headers.
 
 ### 4. Utilities & Tools
 *   **JSON Trip Importer**: A specialized page template (`page-importer.php`) allowing bulk import of trips via JSON payload. It automatically handles bilingual linking (ID <-> EN) and taxonomy creation.
-*   **Booking & Contact Forms**: Built-in form handlers (`admin-post` hooks) that send styled HTML emails to the administrator and redirect users to a Thank You page.
+*   **Interactive Documentation**: A dedicated "Theme Docs" page in the Admin Dashboard containing user guides and AI prompts for the importer.
+*   **Centralized Company Info**: A settings page to manage Addresses, Phone Numbers, and Social Media links globally.
 
 ## 📂 File Structure
 
@@ -48,17 +49,26 @@ The theme includes a robust Custom Post Type called **Trips** (`trip`), featurin
 nextur-theme/
 ├── assets/
 │   ├── images/          # Logos and static assets
-│   └── js/
-│       └── admin-gallery.js  # JS for handling media uploaders in Admin
-├── functions.php        # Core logic, CPTs, Meta Boxes, Form Handlers, Enqueue
-├── header.php           # Glassmorphism header, Nav, Alpine.js Mobile Menu
-├── footer.php           # (Standard footer template)
-├── front-page.php       # The main homepage layout
+│   └── js/              # Admin scripts
+├── inc/                 # Core Functionality
+│   ├── company-info.php # Theme Settings Page
+│   ├── documentation.php# Admin Documentation Page
+│   ├── forms.php        # Contact Form Logic
+│   ├── helpers.php      # Helper functions
+│   ├── meta-boxes.php   # Trip CPT Meta Boxes
+│   ├── polylang.php     # String Translations
+│   ├── post-types.php   # CPT Registration
+│   └── setup.php        # Theme Setup & Enqueue
+├── functions.php        # Main Loader
+├── header.php           # Glassmorphism header, Nav
+├── footer.php           # Footer with dynamic company info
+├── front-page.php       # Homepage layout
 ├── page-about.php       # "About Us" template
-├── page-accomodation.php # "Accommodation" (Coming Soon) template
+├── page-contact.php     # "Contact Us" template with Form
+├── page-services.php    # "Services" template
 ├── page-importer.php    # Internal tool for JSON imports
-├── style.css            # Theme declaration
-└── README.md            # Documentation
+├── page-thank-you.php   # Redirect page for forms
+└── style.css            # Theme declaration
 ```
 
 ## 🛠️ Installation & Setup
@@ -69,52 +79,39 @@ nextur-theme/
     *   *(Optional)* **Classic Editor**: If you prefer the classic interface for meta boxes.
 3.  **Configure Polylang**:
     *   Add languages: **Indonesian (id)** and **English (en)**.
-    *   Go to *Languages > String Translations* to translate UI strings (e.g., "Hubungi Kami", "Mulai dari").
+    *   Go to *Languages > String Translations* to translate UI strings.
 4.  **Create Pages**:
-    *   **Home**: Create a page, assign the `Front Page` template (or just leave default if using `front-page.php`), and set it as the static homepage in *Settings > Reading*.
-    *   **About**: Create a page and assign the `About Page` template.
-    *   **Importer**: Create a private page and assign the `Interactive Trip Importer` template.
-    *   **Thank You**: Create a page with slug `thank-you` for form redirects.
-5.  **Setup Menus**:
-    *   Go to *Appearance > Menus*.
-    *   Create a "Primary Menu" and assign it to the `Primary Menu` location.
+    *   **Home**: Create a page, assign the `Front Page` template, and set as static homepage.
+    *   **About**: Assign the `About Page` template.
+    *   **Services**: Assign the `Services Page` template.
+    *   **Contact**: Assign the `Contact Page` template.
+    *   **Importer**: Create a private page, assign the `Interactive Trip Importer` template.
+5.  **Setup Company Info**:
+    *   Go to **Company Info** in the admin sidebar.
+    *   Fill in Address, Phone, Email, and Social Media URLs.
+    *   These details will automatically populate the Footer and Contact Page.
 
 ## 📝 Usage Guide
 
-### Adding a New Trip
-1.  Go to **Trips > Add New**.
-2.  Enter the Title.
-3.  **Right Sidebar**: Select **Destination** and **Activity**.
-4.  **Meta Boxes**:
-    *   Fill in Airline, Route, Price.
-    *   Check **"Featured on Homepage?"** to add it to the main Hero Slider.
-    *   Use the **Dynamic Itinerary** section to add days.
-    *   Upload images to the **Trip Gallery**.
-5.  **Translation**: Click the (+) icon in the Languages box to add the translation for the other language.
+### Using the Batch Importer
+1.  Go to **Theme Docs** > **Import Tool (AI)**.
+2.  Copy the **System Instruction**.
+3.  Paste it into ChatGPT/Gemini along with your itinerary document.
+4.  Copy the JSON result.
+5.  Go to the **Importer Page** on your frontend (must be logged in).
+6.  Paste JSON and run.
 
-### Managing Homepage Highlights
-1.  Go to **Indo Highlights** (Gallery Items).
-2.  Add New Item.
-3.  **Title**: City/Location Name.
-4.  **Featured Image**: The visual card image.
-5.  **Destination Link**: URL to the specific destination archive or trip page.
-
-### Using the Importer
-1.  Navigate to the page assigned to the **Interactive Trip Importer** template.
-2.  Paste the JSON payload (structure defined in `page-importer.php`).
-3.  Click **Run Importer**.
-4.  The tool will create/update trips, assign taxonomies, and link English/Indonesian versions automatically.
+### Managing Content
+*   **Trips**: Add/Edit trips via the "Trips" menu. Use the "Dynamic Itinerary" meta box to build day-by-day schedules.
+*   **Highlights**: Manage the "Indo Highlights" slider via the "Indo Highlights" menu.
+*   **Company Details**: Update globally via the "Company Info" menu.
 
 ## 🎨 Customization
 
-*   **Colors & Fonts**: Defined in `functions.php` under `tailwind.config`.
+*   **Colors & Fonts**: Defined in `inc/setup.php` or `header.php` (Tailwind config).
     *   Brand Color: `#0284C7` (Sky 600)
-    *   Fonts: Inter (Body), Poppins (Heading)
-*   **Icons**: Uses standard SVG paths in PHP files. To change icons, replace the `<svg>` tags.
+*   **Icons**: Uses standard SVG paths inline.
 
 ## 🔒 Security
 
-The theme implements basic hardening in `functions.php`:
-*   Disables XML-RPC.
-*   Hides WP Version.
-*   Blocks user enumeration scans.
+*   Hardening rules applied in `inc/helpers.php` (XML-RPC disabled, Version hidden).

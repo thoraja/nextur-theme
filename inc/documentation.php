@@ -104,6 +104,7 @@ function nextur_render_docs_page() {
                     <li><a href="#activities" class="nav-link" onclick="showSection('activities')"><span class="dashicons dashicons-palmtree"></span> <span class="txt-id">Gaya Liburan</span><span class="txt-en" style="display:none">Vacation Styles</span></a></li>
                     <li><a href="#highlights" class="nav-link" onclick="showSection('highlights')"><span class="dashicons dashicons-images-alt2"></span> <span class="txt-id">Indo Highlights</span><span class="txt-en" style="display:none">Indo Highlights</span></a></li>
                     <li><a href="#journal" class="nav-link" onclick="showSection('journal')"><span class="dashicons dashicons-welcome-write-blog"></span> <span class="txt-id">Artikel / Jurnal</span><span class="txt-en" style="display:none">Articles / Journal</span></a></li>
+                    <li><a href="#pages" class="nav-link" onclick="showSection('pages')"><span class="dashicons dashicons-admin-page"></span> <span class="txt-id">Halaman & Template</span><span class="txt-en" style="display:none">Pages & Templates</span></a></li>
                 </ul>
             </nav>
 
@@ -149,9 +150,11 @@ function nextur_render_docs_page() {
                             </ul>
                         </div>
 
+                        <p><a href="<?php echo admin_url('admin.php?page=nextur-company-info'); ?>" class="button button-primary">Edit Info Perusahaan &rarr;</a></p>
+
                         <h3>Cara Mengubah Data</h3>
                         <ol>
-                            <li>Klik menu <strong>Company Info</strong> di sidebar admin (di bawah Dashboard).</li>
+                            <li>Klik tombol di atas atau menu <strong>Company Info</strong> di sidebar admin.</li>
                             <li>Isi kolom yang tersedia:
                                 <ul>
                                     <li><strong>Contact Details:</strong> Alamat, Telepon (tampilan), Email, Secondary Email (CC), WhatsApp Link.</li>
@@ -176,9 +179,11 @@ function nextur_render_docs_page() {
                             </ul>
                         </div>
 
+                        <p><a href="<?php echo admin_url('admin.php?page=nextur-company-info'); ?>" class="button button-primary">Edit Company Info &rarr;</a></p>
+
                         <h3>How to Update</h3>
                         <ol>
-                            <li>Click <strong>Company Info</strong> menu in the admin sidebar (below Dashboard).</li>
+                            <li>Click the button above or <strong>Company Info</strong> menu in the admin sidebar.</li>
                             <li>Fill in the fields:
                                 <ul>
                                     <li><strong>Contact Details:</strong> Address, Phone (display), Email, Secondary Email (CC), WhatsApp Link.</li>
@@ -373,6 +378,11 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                                 <li><strong>Halaman Arsip Trip:</strong> Semua trip yang tersedia.</li>
                             </ul>
                         </div>
+                        
+                        <p>
+                            <a href="<?php echo admin_url('post-new.php?post_type=trip'); ?>" class="button button-primary">+ Tambah Trip</a>
+                            <a href="<?php echo admin_url('edit.php?post_type=trip'); ?>" class="button">Lihat Semua Trip</a>
+                        </p>
 
                         <h3>Cara Menambah Trip</h3>
                         <ol>
@@ -397,6 +407,11 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                                 <li><strong>Trip Archive Page:</strong> All available trips.</li>
                             </ul>
                         </div>
+                        
+                        <p>
+                            <a href="<?php echo admin_url('post-new.php?post_type=trip'); ?>" class="button button-primary">+ Add New Trip</a>
+                            <a href="<?php echo admin_url('edit.php?post_type=trip'); ?>" class="button">View All Trips</a>
+                        </p>
 
                         <h3>How to Add a Trip</h3>
                         <ol>
@@ -418,6 +433,8 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                             <span class="feature-title">TAMPIL DI:</span>
                             <p>Slider <strong>"Gaya Liburan"</strong> di Homepage.</p>
                         </div>
+                        
+                        <p><a href="<?php echo admin_url('edit-tags.php?taxonomy=activity&post_type=trip'); ?>" class="button button-primary">Atur Kategori Activity &rarr;</a></p>
 
                         <h3>Cara Mengatur</h3>
                         <ol>
@@ -434,6 +451,8 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                             <span class="feature-title">SHOWN AT:</span>
                             <p>The <strong>"Gaya Liburan"</strong> slider on Homepage.</p>
                         </div>
+                        
+                        <p><a href="<?php echo admin_url('edit-tags.php?taxonomy=activity&post_type=trip'); ?>" class="button button-primary">Manage Activities &rarr;</a></p>
                     </div>
                 </div>
 
@@ -447,6 +466,11 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                             <span class="feature-title">TAMPIL DI:</span>
                             <p>Bagian <strong>"Jelajahi Indonesia"</strong> di Homepage (Slider kedua).</p>
                         </div>
+                        
+                        <p>
+                            <a href="<?php echo admin_url('post-new.php?post_type=gallery_item'); ?>" class="button button-primary">+ Tambah Highlight</a>
+                            <a href="<?php echo admin_url('edit.php?post_type=gallery_item'); ?>" class="button">Lihat Semua</a>
+                        </p>
 
                         <h3>Cara Menambah</h3>
                         <ol>
@@ -464,6 +488,11 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                             <span class="feature-title">SHOWN AT:</span>
                             <p>The <strong>"Jelajahi Indonesia"</strong> section on Homepage (Second slider).</p>
                         </div>
+                        
+                        <p>
+                            <a href="<?php echo admin_url('post-new.php?post_type=gallery_item'); ?>" class="button button-primary">+ Add New Highlight</a>
+                            <a href="<?php echo admin_url('edit.php?post_type=gallery_item'); ?>" class="button">View All</a>
+                        </p>
 
                         <h3>How to Add</h3>
                         <ol>
@@ -484,6 +513,11 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                             <span class="feature-title">TAMPIL DI:</span>
                             <p>Bagian terbawah Homepage <strong>"Artikel & Inspirasi"</strong> dan halaman Blog.</p>
                         </div>
+                        
+                        <p>
+                            <a href="<?php echo admin_url('post-new.php'); ?>" class="button button-primary">+ Tulis Artikel Baru</a>
+                            <a href="<?php echo admin_url('edit.php'); ?>" class="button">Lihat Semua Artikel</a>
+                        </p>
 
                         <h3>Cara Menulis Artikel</h3>
                         <ol>
@@ -500,6 +534,11 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                             <span class="feature-title">SHOWN AT:</span>
                             <p>Bottom section of Homepage <strong>"Artikel & Inspirasi"</strong>.</p>
                         </div>
+                        
+                        <p>
+                            <a href="<?php echo admin_url('post-new.php'); ?>" class="button button-primary">+ Write New Article</a>
+                            <a href="<?php echo admin_url('edit.php'); ?>" class="button">View All Articles</a>
+                        </p>
 
                         <h3>How to Write</h3>
                         <ol>
@@ -507,6 +546,38 @@ Reply only with:"Nextur Extraction Engine (with Activities) Ready. Please upload
                             <li>Write your article.</li>
                             <li>Set <strong>Category</strong> and <strong>Featured Image</strong>.</li>
                         </ol>
+                    </div>
+                </div>
+                
+                <!-- SECTION: PAGES -->
+                <div id="sec-pages" class="docs-section">
+                    <div class="lang-content-id">
+                        <h2>Halaman & Template</h2>
+                        <p>Panduan mengelola halaman statis (Services, Contact, About).</p>
+                        
+                        <p><a href="<?php echo admin_url('edit.php?post_type=page'); ?>" class="button button-primary">Kelola Halaman &rarr;</a></p>
+
+                        <h3 style="margin-top:20px;">Template Khusus</h3>
+                        <ul class="ul-disc">
+                            <li><strong>Services:</strong> Buat halaman baru, pilih Template "Services Page". Konten diatur langsung di file <code>page-services.php</code> (Static).</li>
+                            <li><strong>Contact:</strong> Buat halaman baru, pilih Template "Contact Page". Info kontak diambil dari menu "Company Info".</li>
+                            <li><strong>About:</strong> Buat halaman baru, pilih Template "About Page".</li>
+                            <li><strong>Thank You:</strong> Buat halaman dengan slug <code>thank-you</code> untuk redirect setelah form submit.</li>
+                        </ul>
+                    </div>
+                    <div class="lang-content-en" style="display:none">
+                        <h2>Pages & Templates</h2>
+                        <p>Guide to managing static pages (Services, Contact, About).</p>
+                        
+                        <p><a href="<?php echo admin_url('edit.php?post_type=page'); ?>" class="button button-primary">Manage Pages &rarr;</a></p>
+
+                        <h3 style="margin-top:20px;">Special Templates</h3>
+                        <ul class="ul-disc">
+                            <li><strong>Services:</strong> Create a new page, select "Services Page" Template. Content is static in <code>page-services.php</code>.</li>
+                            <li><strong>Contact:</strong> Create a new page, select "Contact Page" Template. Contact info is pulled from "Company Info".</li>
+                            <li><strong>About:</strong> Create a new page, select "About Page" Template.</li>
+                            <li><strong>Thank You:</strong> Create a page with slug <code>thank-you</code> for form redirects.</li>
+                        </ul>
                     </div>
                 </div>
 
